@@ -1,6 +1,100 @@
 [build-system]
+build-backend = "poetry.core.masonry.api"
 requires = [
-    "setuptools >= 44",
-    "wheel >= 0.29.0",
+  "poetry-core",
 ]
-build-backend = 'setuptools.build_meta'
+
+[tool.poetry]
+name = "py3-gnupg"
+version = "1.0.0"
+description = "A wrapper for the Gnu Privacy Guard (GPG or GnuPG)"
+readme = "README.md"
+repository = "https://github.com/eggplants/py3-gnupg"
+authors = [
+  "Vinay Sajip <vinay_sajip@yahoo.co.uk>",
+]
+maintainers = [
+  "HARUNA Wataru <w10776e8w@yahoo.co.jp>",
+]
+license = "BSD"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+documentation = "https://egpl.dev/py3-gnupg"
+keywords = [
+  "GnuPG",
+  "cryptography",
+  "encryption",
+  "decryption",
+  "signing",
+  "verification",
+]
+packages = [
+  { include = "gnupg" },
+]
+include = [ "CHANGELOG.md" ]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/eggplants/py3-gnupg/issues"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4"
+
+[tool.poetry.group.dev.dependencies]
+mypy = ">=0.991,<1.11"
+pre-commit = ">=2.20,<4.0"
+taskipy = "^1.10.3"
+pytest = ">=7.2.2,<9.0.0"
+pytest-cov = ">=4,<6"
+
+[tool.black]
+line-length = 120
+target-version = [
+  'py39',
+]
+
+[tool.ruff]
+line-length = 120
+lint.select = [
+  "ALL",
+]
+lint.ignore = [
+  "ANN101",
+  "D",
+]
+lint.per-file-ignores."docs/conf.py" = [
+  "ANN001", # Missing type annotation for function argument
+  "ARG001", # Unused function argument
+  "ERA001", # Found commented-out code
+]
+
+# lint.mccabe = 18
+
+lint.per-file-ignores."tests/*test_*.py" = [
+  "INP001", # File tests/test_*.py is part of an implicit namespace package. Add an __init__.py.
+  "S101",   # Use of assert detected
+]
+
+[tool.mypy]
+pretty = true
+python_version = "3.9"
+show_error_codes = true
+strict = true
+
+[tool.taskipy.tasks]
+test = "pytest --cov=python_gnupg --cov-report=term"
+"test:ci" = "task test --cov-report=xml:cov.xml"
+lint = "pre-commit run -a"
+profile = "python -m cProfile"

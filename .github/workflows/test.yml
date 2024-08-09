@@ -1,0 +1,48 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '7 3 7 * *'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-12, macos-latest, windows-latest]
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', 'pypy-3.9']
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        cache: pip
+        cache-dependency-path: poetry.lock
+        python-version: ${{ matrix.python-version }}
+    - uses: abatilo/actions-poetry@v3
+    - run: poetry install --no-interaction
+
+    - name: Install winget
+      if: ${{ matrix.os == 'windows-latest' }}
+      uses: Cyberboss/install-winget@v1
+    - name: Install Windows-only dependencies
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: |
+        winget install --id GnuPG.GnuPG --disable-interactivity --accept-source-agreements
+    - name: Test
+      if: ${{ runner.os != 'Linux' }}
+      run: |
+        gpg --version
+        poetry run task test
+    - name: Test & publish code coverage
+      if: ${{ runner.os == 'Linux' && env.CC_TEST_REPORTER_ID != '' }}
+      uses: paambaati/codeclimate-action@v8.0.0
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+        coverageCommand: poetry run task test:ci
+        coverageLocations: ${{github.workspace}}/cov.xml:coverage.py
+        debug: true
