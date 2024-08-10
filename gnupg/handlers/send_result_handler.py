@@ -14,5 +14,5 @@ class SendResultHandler(StatusHandler):
 
     returncode = None
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
         logger.debug("SendResult: %s: %s", key, value)

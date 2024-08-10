@@ -21,7 +21,7 @@ class StatusHandler:
         self.gpg = gpg
         self.data: str | None = None
 
-    def handle_status(self, key, value) -> NoReturn:
+    def handle_status(self, key: str, value: str) -> NoReturn:
         """
         Handle status messages from the `gpg` child process. These are lines of the format
 

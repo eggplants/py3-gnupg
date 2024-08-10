@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from gnupg.helper import _get_logger
@@ -26,19 +27,21 @@ class DeleteResultHandler(StatusHandler):
     def __str__(self) -> str:
         return self.status
 
-    problem_reason = {
-        "1": "No such key",
-        "2": "Must delete secret key first",
-        "3": "Ambiguous specification",
-    }
+    problem_reason = MappingProxyType(
+        {
+            "1": "No such key",
+            "2": "Must delete secret key first",
+            "3": "Ambiguous specification",
+        },
+    )
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
         if key == "DELETE_PROBLEM":  # pragma: no cover
             self.status = self.problem_reason.get(value, f"Unknown error: {value!r}")
         else:  # pragma: no cover
             logger.debug("message ignored: %s, %s", key, value)
 
-    def __nonzero__(self):  # pragma: no cover
+    def __nonzero__(self) -> bool:  # pragma: no cover
         return self.status == "ok"
 
     __bool__ = __nonzero__

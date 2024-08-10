@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from gnupg.helper import _get_logger
 
+from .helper import _determine_invalid_recipient_or_signer
 from .text_handler import TextHandler
 from .verify_handler import VerifyHandler
 
@@ -31,7 +32,7 @@ class CryptHandler(VerifyHandler, TextHandler):
 
     __bool__ = __nonzero__
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
         if key in ("WARNING", "ERROR"):
             logger.warning("potential problem: %s: %s", key, value)
         elif key == "NODATA":

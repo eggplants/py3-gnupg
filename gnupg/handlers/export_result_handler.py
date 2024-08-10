@@ -11,7 +11,7 @@ class ExportResultHandler(GenKeyHandler):
     # For now, just use an existing class to base it on - if needed, we
     # can override handle_status for more specific message handling.
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
         if key in ("EXPORTED", "EXPORT_RES"):
             pass
         else:

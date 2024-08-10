@@ -875,10 +875,10 @@ class GPGTestCase(unittest.TestCase):
             passphrase = None
         else:
             passphrase = "bbrown"
-        ascii = gpg.export_keys(key.fingerprint, True, passphrase=passphrase)
+        ascii = gpg.export_keys(key.fingerprint, secret=True, passphrase=passphrase)
         assert isinstance(ascii, str)
         assert ascii.find("PGP PRIVATE KEY BLOCK") >= 0, "Exported key should be private"
-        binary = gpg.export_keys(key.fingerprint, True, armor=False, passphrase=passphrase)
+        binary = gpg.export_keys(key.fingerprint, secret=True, armor=False, passphrase=passphrase)
         assert not isinstance(binary, str)
         # import a secret key, and confirm that it's found in the list of
         # secret keys.
@@ -966,7 +966,7 @@ class GPGTestCase(unittest.TestCase):
         assert sig.hash_algo
 
         file = gnupg.helper._make_binary_stream(sig.data, self.gpg.encoding)
-        verified = self.gpg.verify_file(file, self.test_fn)
+        verified = self.gpg.verify_file(file, data_filename=self.test_fn)
         assert verified.returncode == 0, "Non-zero return code"
         if key.fingerprint != verified.fingerprint:  # pragma: no cover
             logger.debug("key: %r", key.fingerprint)
@@ -1085,7 +1085,7 @@ class GPGTestCase(unittest.TestCase):
     def test_make_args(self) -> None:
         "Test argument line construction"
         self.gpg.options = ["--foo", "--bar"]
-        args = self.gpg.make_args(["a", "b"], False)
+        args = self.gpg.make_args(["a", "b"], passphrase=False)
         assert len(args) > 4
         assert args[-4:] == ["--foo", "--bar", "a", "b"]
 

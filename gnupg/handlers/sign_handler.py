@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from gnupg.helper import _get_logger
 
+from .helper import _determine_invalid_recipient_or_signer
 from .status_handler import StatusHandler
 from .text_handler import TextHandler
 
@@ -35,7 +36,7 @@ class SignHandler(StatusHandler, TextHandler):
 
     __bool__ = __nonzero__
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
         if key in ("WARNING", "ERROR", "FAILURE"):  # pragma: no cover
             logger.warning("potential problem: %s: %s", key, value)
         elif key in ("KEYEXPIRED", "SIGEXPIRED"):  # pragma: no cover

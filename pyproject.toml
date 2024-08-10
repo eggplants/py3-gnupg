@@ -87,7 +87,6 @@ lint.per-file-ignores."tests/*test_*.py" = [
 ]
 
 lint.mccabe.max-complexity = 26
-
 lint.pylint.max-branches = 30
 lint.pylint.max-statements = 100
 

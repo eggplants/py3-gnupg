@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from gnupg.helper import _get_logger
@@ -34,24 +35,28 @@ class ImportResultHandler(StatusHandler):
 
     __bool__ = __nonzero__
 
-    ok_reason = {
-        "0": "Not actually changed",
-        "1": "Entirely new key",
-        "2": "New user IDs",
-        "4": "New signatures",
-        "8": "New subkeys",
-        "16": "Contains private key",
-    }
+    ok_reason = MappingProxyType(
+        {
+            "0": "Not actually changed",
+            "1": "Entirely new key",
+            "2": "New user IDs",
+            "4": "New signatures",
+            "8": "New subkeys",
+            "16": "Contains private key",
+        },
+    )
 
-    problem_reason = {
-        "0": "No specific reason given",
-        "1": "Invalid Certificate",
-        "2": "Issuer Certificate missing",
-        "3": "Certificate Chain too long",
-        "4": "Error storing certificate",
-    }
+    problem_reason = MappingProxyType(
+        {
+            "0": "No specific reason given",
+            "1": "Invalid Certificate",
+            "2": "Issuer Certificate missing",
+            "3": "Certificate Chain too long",
+            "4": "Error storing certificate",
+        },
+    )
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
         if key in ("WARNING", "ERROR"):  # pragma: no cover
             logger.warning("potential problem: %s: %s", key, value)
         elif key in ("IMPORTED", "KEY_CONSIDERED"):
@@ -71,7 +76,7 @@ class ImportResultHandler(StatusHandler):
         elif key == "IMPORT_PROBLEM":  # pragma: no cover
             try:
                 reason, fingerprint = value.split()
-            except Exception:
+            except (AttributeError, Exception):
                 reason = value
                 fingerprint = "<unknown>"
             self.results.append({"fingerprint": fingerprint, "problem": reason, "text": self.problem_reason[reason]})

@@ -6,7 +6,7 @@ import threading
 from io import BufferedReader, BufferedWriter, BytesIO, TextIOWrapper
 
 
-def _get_logger(name):
+def _get_logger(name: str) -> logging.Logger:
     logger = logging.getLogger(name)
     if not logger.handlers:
         logger.addHandler(logging.NullHandler())
@@ -38,31 +38,32 @@ def _threaded_copy_data(
     outstream: BufferedWriter,
     buffer_size: int,
 ) -> threading.Thread:
-    def copy_data(instream, outstream, buffer_size) -> None:
+    def copy_data(
+        instream: BufferedReader | BytesIO | TextIOWrapper,
+        outstream: BufferedWriter,
+        buffer_size: int,
+    ) -> None:
         # Copy one stream to another
-        assert buffer_size > 0
+        assert buffer_size > 0  # noqa: S101
         sent = 0
-        if hasattr(sys.stdin, "encoding"):
-            enc = sys.stdin.encoding
-        else:  # pragma: no cover
-            enc = "ascii"
+        enc = sys.stdin.encoding if hasattr(sys.stdin, "encoding") else "ascii"
         while True:
             # See issue #39: read can fail when e.g. a text stream is provided
             # for what is actually a binary file
             try:
                 data = instream.read(buffer_size)
-            except Exception:  # pragma: no cover
+            except (UnicodeError, Exception):  # pragma: no cover
                 logger.warning("Exception occurred while reading", exc_info=1)
                 break
             if not data:
                 break
             sent += len(data)
-            # logger.debug('sending chunk (%d): %r', sent, data[:256])
+            logger.debug("sending chunk (%d): %r", sent, data[:256])
             try:
                 outstream.write(data)
             except UnicodeError:  # pragma: no cover
                 outstream.write(data.encode(enc))
-            except Exception:  # pragma: no cover
+            except (BrokenPipeError, Exception):  # pragma: no cover
                 # Can sometimes get 'broken pipe' errors even when the data has all
                 # been sent
                 logger.exception("Error sending data")
@@ -73,7 +74,7 @@ def _threaded_copy_data(
             logger.warning("Exception occurred while closing: ignored", exc_info=1)
         logger.debug("closed output, %d bytes sent", sent)
 
-    assert buffer_size > 0
+    assert buffer_size > 0  # noqa: S101
     wr = threading.Thread(target=copy_data, args=(instream, outstream, buffer_size))
     wr.daemon = True
     logger.debug("data copier: %r, %r, %r", wr, instream, outstream)

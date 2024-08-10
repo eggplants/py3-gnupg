@@ -25,7 +25,7 @@ class GenKeyHandler(StatusHandler):
         self.fingerprint = ""
         self.status = None
 
-    def __nonzero__(self):  # pragma: no cover
+    def __nonzero__(self) -> bool:  # pragma: no cover
         return bool(self.fingerprint)
 
     __bool__ = __nonzero__
@@ -33,7 +33,7 @@ class GenKeyHandler(StatusHandler):
     def __str__(self) -> str:  # pragma: no cover
         return self.fingerprint
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
         if key in ("WARNING", "ERROR"):  # pragma: no cover
             logger.warning("potential problem: %s: %s", key, value)
         elif key == "KEY_CREATED":

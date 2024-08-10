@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from gnupg.helper import _get_logger
@@ -24,27 +25,33 @@ class VerifyHandler(StatusHandler):
     TRUST_FULLY = 4
     TRUST_ULTIMATE = 5
 
-    TRUST_LEVELS = {
-        "TRUST_EXPIRED": TRUST_EXPIRED,
-        "TRUST_UNDEFINED": TRUST_UNDEFINED,
-        "TRUST_NEVER": TRUST_NEVER,
-        "TRUST_MARGINAL": TRUST_MARGINAL,
-        "TRUST_FULLY": TRUST_FULLY,
-        "TRUST_ULTIMATE": TRUST_ULTIMATE,
-    }
+    TRUST_LEVELS = MappingProxyType(
+        {
+            "TRUST_EXPIRED": TRUST_EXPIRED,
+            "TRUST_UNDEFINED": TRUST_UNDEFINED,
+            "TRUST_NEVER": TRUST_NEVER,
+            "TRUST_MARGINAL": TRUST_MARGINAL,
+            "TRUST_FULLY": TRUST_FULLY,
+            "TRUST_ULTIMATE": TRUST_ULTIMATE,
+        },
+    )
 
     # for now, just the most common error codes. This can be expanded as and
     # when reports come in of other errors.
-    GPG_SYSTEM_ERROR_CODES = {
-        1: "permission denied",
-        35: "file exists",
-        81: "file not found",
-        97: "not a directory",
-    }
+    GPG_SYSTEM_ERROR_CODES = MappingProxyType(
+        {
+            1: "permission denied",
+            35: "file exists",
+            81: "file not found",
+            97: "not a directory",
+        },
+    )
 
-    GPG_ERROR_CODES = {
-        11: "incorrect passphrase",
-    }
+    GPG_ERROR_CODES = MappingProxyType(
+        {
+            11: "incorrect passphrase",
+        },
+    )
 
     returncode = None
 
@@ -65,14 +72,14 @@ class VerifyHandler(StatusHandler):
         self.sig_info = {}
         self.problems = []
 
-    def __nonzero__(self):  # pragma: no cover
+    def __nonzero__(self) -> bool:  # pragma: no cover
         return self.valid
 
     __bool__ = __nonzero__
 
-    def handle_status(self, key, value) -> None:
+    def handle_status(self, key: str, value: str) -> None:
 
-        def update_sig_info(**kwargs) -> None:
+        def update_sig_info(**kwargs: object) -> None:
             sig_id = self.signature_id
             if sig_id:
                 info = self.sig_info[sig_id]
@@ -101,7 +108,7 @@ class VerifyHandler(StatusHandler):
             parts = value.split()
             (self.key_id, algo, hash_algo, cls, self.timestamp) = parts[:5]
             # Since GnuPG 2.2.7, a fingerprint is tacked on
-            if len(parts) >= 7:
+            if len(parts) >= 7:  # noqa: PLR2004
                 self.fingerprint = parts[6]
             self.status = "signature error"
             update_sig_info(
@@ -139,7 +146,7 @@ class VerifyHandler(StatusHandler):
                 expire_ts,
             )
             # may be different if signature is made with a subkey
-            if len(parts) >= 10:
+            if len(parts) >= 10:  # noqa: PLR2004
                 self.pubkey_fingerprint = parts[9]
             self.status = "signature valid"
             update_sig_info(

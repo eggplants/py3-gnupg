@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import codecs
+import contextlib
 import logging
 import os
 import re
@@ -10,7 +11,7 @@ from io import BufferedReader, BufferedWriter, BytesIO, TextIOWrapper
 from pathlib import Path
 from subprocess import PIPE, Popen
 from types import MappingProxyType
-from typing import TYPE_CHECKING
+from typing import IO, TYPE_CHECKING, Any, Callable
 
 from .handlers import (
     AddSubkeyHandler,
@@ -119,17 +120,15 @@ class GPG:
         if self.gnupghome and not self.gnupghome.is_dir():
             msg = f"gnupghome should be a directory (it isn't): {self.gnupghome}"
             raise ValueError(msg)
-        if keyring:
-            # Allow passing a string or another iterable. Make it uniformly
-            # a list of keyring filenames
-            if isinstance(keyring, str):
-                keyring = [keyring]
+        # Allow passing a string or another iterable. Make it uniformly
+        # a list of keyring filenames
+        if keyring and isinstance(keyring, str):
+            keyring = [keyring]
         self.keyring = keyring
-        if secret_keyring:  # pragma: no cover
-            # Allow passing a string or another iterable. Make it uniformly
-            # a list of keyring filenames
-            if isinstance(secret_keyring, str):
-                secret_keyring = [secret_keyring]
+        # Allow passing a string or another iterable. Make it uniformly
+        # a list of keyring filenames
+        if secret_keyring and isinstance(secret_keyring, str):  # pragma: no cover
+            secret_keyring = [secret_keyring]
         self.secret_keyring = secret_keyring
         self.verbose = verbose
         self.use_agent = use_agent
@@ -149,7 +148,7 @@ class GPG:
         except OSError:
             msg = f"Unable to run gpg ({self.gpgbinary}) - it may not be available."
             logger.exception(msg)
-            raise OSError(msg)
+            raise OSError(msg) from None
         result = self.result_map["verify"](self)  # any result will do for this
         self._collect_output(p, result, stdin=p.stdin)
         if p.returncode != 0:  # pragma: no cover
@@ -166,7 +165,7 @@ class GPG:
         # can't be too strict.
         self.check_fingerprint_collisions = False
 
-    def make_args(self, args: list[str], passphrase: bool) -> list[str]:
+    def make_args(self, args: list[str], *, passphrase: bool | None = False) -> list[str]:
         """
         Make a list of command line elements for GPG. The value of ``args``
         will be appended. The ``passphrase`` argument needs to be True if
@@ -200,13 +199,13 @@ class GPG:
         cmd.extend(args)
         return cmd
 
-    def _open_subprocess(self, args: list[str], passphrase: bool = False) -> Popen:
+    def _open_subprocess(self, args: list[str], *, passphrase: bool | None = False) -> Popen:
         # Internal method: open a pipe to a GPG subprocess and return
         # the file objects for communicating with it.
 
         from subprocess import list2cmdline as debug_print
 
-        cmd = self.make_args(args, passphrase)
+        cmd = self.make_args(args, passphrase=passphrase)
         if self.verbose:  # pragma: no cover
             pass
         if not STARTUPINFO:
@@ -215,11 +214,19 @@ class GPG:
             si = STARTUPINFO()
             si.dwFlags = STARTF_USESHOWWINDOW
             si.wShowWindow = SW_HIDE
-        result = Popen(cmd, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE, startupinfo=si, env=self.env)
+        result = Popen(  # noqa: S603
+            cmd,
+            shell=False,
+            stdin=PIPE,
+            stdout=PIPE,
+            stderr=PIPE,
+            startupinfo=si,
+            env=self.env,
+        )
         logger.debug("%s: %s", result.pid, debug_print(cmd))
         return result
 
-    def _read_response(self, stream, result) -> None:
+    def _read_response(self, stream: IO, result: StatusHandler) -> None:
         # Internal method: reads all the stderr output from GPG, taking notice
         # only of lines that begin with the magic [GNUPG:] prefix.
         #
@@ -237,16 +244,22 @@ class GPG:
             logger.debug("%s", line)
             if line[0:9] == "[GNUPG:] ":
                 # Chop off the prefix
-                line = line[9:]
-                L = line.split(None, 1)
-                keyword = L[0]
-                value = L[1] if len(L) > 1 else ""
+                line = line[9:].split(None, 1)
+                keyword = line[0]
+                value = line[1] if len(line) > 1 else ""
                 result.handle_status(keyword, value)
         result.stderr = "".join(lines)
 
-    def _read_data(self, stream, result, on_data=None, buffer_size=1024) -> None:
+    def _read_data(
+        self,
+        stream: IO,
+        result: StatusHandler,
+        *,
+        on_data: Callable[[str | bytes], Any] | None = None,
+        buffer_size: int = 1024,
+    ) -> None:
         # Read the contents of the file from GPG's stdout
-        assert buffer_size > 0
+        assert buffer_size > 0  # noqa: S101
         chunks = []
         while True:
             data = stream.read(buffer_size)
@@ -255,7 +268,8 @@ class GPG:
                     on_data(data)
                 break
             if log_everything:
-                logger.debug(f"chunk: {data[:256]!r}")
+                msg = f"chunk: {data[:256]!r}"
+                logger.debug(msg)
             append = True
             if on_data:
                 append = on_data(data) is not False
@@ -283,7 +297,11 @@ class GPG:
         rr.start()
 
         stdout = process.stdout
-        dr = threading.Thread(target=self._read_data, args=(stdout, result, self.on_data, self.buffer_size))
+        dr = threading.Thread(
+            target=self._read_data,
+            args=(stdout, result),
+            kwargs={"on_data": self.on_data, "buffer_size": self.buffer_size},
+        )
         dr.daemon = True
         logger.debug("stdout reader: %r", dr)
         dr.start()
@@ -297,10 +315,8 @@ class GPG:
         if rc != 0:
             logger.warning("gpg returned a non-zero error code: %d", rc)
         if stdin is not None:
-            try:
+            with contextlib.suppress(OSError):
                 stdin.close()
-            except OSError:  # pragma: no cover
-                pass
         stderr.close()
         stdout.close()
         return rc
@@ -325,11 +341,11 @@ class GPG:
         elif not isinstance(fileobj_or_path, str):
             msg = f"Not a valid file or path: {fileobj_or_path}"
             raise TypeError(msg)
-        elif not os.path.exists(fileobj_or_path):
+        elif not Path(fileobj_or_path).exists():
             msg = f"No such file: {fileobj_or_path}"
             raise ValueError(msg)
         else:
-            result = open(fileobj_or_path, "rb")
+            result = Path(fileobj_or_path).open("rb")  # noqa: SIM115
         return result
 
     def _handle_io(
@@ -337,6 +353,7 @@ class GPG:
         args: list[str],
         fileobj_or_path: str | bytes | BufferedReader | TextIOWrapper | BytesIO,
         result: StatusHandler,
+        *,
         passphrase: str | None = None,
         binary: bool = False,
     ) -> StatusHandler:
@@ -345,11 +362,8 @@ class GPG:
         # including status information. Garbage In, Garbage Out :)
         fileobj = self._get_fileobj(fileobj_or_path)
         try:
-            p = self._open_subprocess(args, passphrase is not None)
-            if not binary:  # pragma: no cover
-                stdin = codecs.getwriter(self.encoding)(p.stdin)
-            else:
-                stdin = p.stdin
+            p = self._open_subprocess(args, passphrase=passphrase is not None)
+            stdin = p.stdin if binary else codecs.getwriter(self.encoding)(p.stdin)
             writer = None  # See issue #237
             if passphrase:
                 _write_passphrase(stdin, passphrase, self.encoding)
@@ -366,7 +380,7 @@ class GPG:
     # SIGNATURE METHODS
     #
 
-    def sign(self, message: bytes, **kwargs) -> SignHandler:
+    def sign(self, message: bytes, **kwargs: str | bool | list[str]) -> SignHandler:
         """
         Sign a message. This method delegates most of the work to the `sign_file()` method.
 
@@ -403,7 +417,7 @@ class GPG:
             args (list[str]): A list of arguments.
             output (str): The path to the outpur file.
         """
-        if os.path.exists(output):
+        if Path(output).exists():
             # We need to avoid an overwrite confirmation message
             args.extend(["--yes"])
         args.extend(["--output", output])
@@ -421,9 +435,10 @@ class GPG:
         """
         return "\n" not in passphrase and "\r" not in passphrase and "\x00" not in passphrase
 
-    def sign_file(
+    def sign_file(  # noqa: PLR0913
         self,
         fileobj_or_path: BufferedReader | BytesIO | str,
+        *,
         keyid: str | None = None,
         passphrase: str | None = None,
         clearsign: bool = True,
@@ -456,10 +471,7 @@ class GPG:
             msg = "Invalid passphrase"
             raise ValueError(msg)
         logger.debug("sign_file: %s", fileobj_or_path)
-        if binary:  # pragma: no cover
-            args = ["-s"]
-        else:
-            args = ["-sa"]
+        args = ["-s"] if binary else ["-sa"]
         # You can't specify detach-sign and clearsign together: gpg ignores
         # the detach-sign in that case.
         if detach:
@@ -478,7 +490,7 @@ class GPG:
         # We could use _handle_io here except for the fact that if the
         # passphrase is bad, gpg bails and you can't write the message.
         fileobj = self._get_fileobj(fileobj_or_path)
-        p = self._open_subprocess(args, passphrase is not None)
+        p = self._open_subprocess(args, passphrase=passphrase is not None)
         try:
             stdin = p.stdin
             if passphrase:
@@ -495,7 +507,7 @@ class GPG:
         self._collect_output(p, result, writer, stdin)
         return result
 
-    def verify(self, data: bytes, **kwargs) -> VerifyHandler:
+    def verify(self, data: bytes, **kwargs: str | bool | list[str] | IO) -> VerifyHandler:
         """
         Verify the signature on the contents of the string *data*. This method delegates most of the work to
         `verify_file()`.
@@ -520,6 +532,7 @@ class GPG:
     def verify_file(
         self,
         fileobj_or_path: BytesIO | str,
+        *,
         data_filename: str | None = None,
         close_file: bool = True,
         extra_args: None = None,
@@ -560,7 +573,7 @@ class GPG:
                 p = self._open_subprocess(args)
                 self._collect_output(p, result, stdin=p.stdin)
             finally:
-                os.remove(fn)
+                Path(fn).unlink()
         return result
 
     def verify_data(self, sig_filename: str, data: bytes, extra_args: None = None) -> VerifyHandler:
@@ -615,17 +628,17 @@ class GPG:
         data.close()
         return result
 
-    def import_keys_file(self, key_path: str, **kwargs) -> ImportResultHandler:
+    def import_keys_file(self, key_path: str, **kwargs: str | list[str]) -> ImportResultHandler:
         """
         Import the key data in key_path into our keyring.
 
         Args:
             key_path (str): A path to the key data to be imported.
         """
-        with open(key_path, "rb") as f:
+        with Path(key_path).open("rb") as f:
             return self.import_keys(f.read(), **kwargs)
 
-    def recv_keys(self, keyserver: str, *keyids, **kwargs) -> ImportResultHandler:
+    def recv_keys(self, keyserver: str, *keyids: str, **kwargs: list[str]) -> ImportResultHandler:
         """
         Import one or more keys from a keyserver.
 
@@ -649,7 +662,7 @@ class GPG:
 
     # This function isn't exercised by tests, to avoid polluting external
     # key servers with test keys
-    def send_keys(self, keyserver, *keyids, **kwargs):  # pragma: no cover
+    def send_keys(self, keyserver: str, *keyids: str, **kwargs: list[str]) -> StatusHandler:  # pragma: no cover
         """
         Send one or more keys to a keyserver.
 
@@ -678,6 +691,7 @@ class GPG:
     def delete_keys(
         self,
         fingerprints: str,
+        *,
         secret: bool = False,
         passphrase: str | None = None,
         expect_passphrase: bool = True,
@@ -713,10 +727,7 @@ class GPG:
                 msg = "For GnuPG >= 2.1, deleting secret keys needs a passphrase to be provided"
                 raise ValueError(msg)
             which = "secret-key"
-        if _is_sequence(fingerprints):  # pragma: no cover
-            fingerprints = list(fingerprints)
-        else:
-            fingerprints = [fingerprints]
+        fingerprints = list(fingerprints) if _is_sequence(fingerprints) else [fingerprints]
 
         if exclamation_mode:
             fingerprints = [f + "!" for f in fingerprints]
@@ -738,9 +749,10 @@ class GPG:
                 f.close()
         return result
 
-    def export_keys(
+    def export_keys(  # noqa: PLR0913
         self,
         keyids: str | list[str],
+        *,
         secret: bool = False,
         armor: bool = True,
         minimal: bool = False,
@@ -823,12 +835,12 @@ class GPG:
             logger.debug("line: %r", line.rstrip())
             if not line:  # pragma: no cover
                 break
-            L = line.strip().split(":")
-            if not L:  # pragma: no cover
+            fields = line.strip().split(":")
+            if not fields:  # pragma: no cover
                 continue
-            keyword = L[0]
+            keyword = fields[0]
             if keyword in valid_keywords:
-                getattr(result, keyword)(L)
+                getattr(result, keyword)(fields)
         return result
 
     def _get_list_output(self, p: Popen, kind: str) -> ListKeysHandler | ScanKeysHandler:
@@ -839,6 +851,7 @@ class GPG:
 
     def list_keys(
         self,
+        *,
         secret: bool = False,
         keys: str | list[str] | None = None,
         sigs: bool = False,
@@ -924,7 +937,12 @@ class GPG:
         data.close()
         return self._decode_result(result)
 
-    def search_keys(self, query, keyserver="pgp.mit.edu", extra_args=None):
+    def search_keys(
+        self,
+        query: str,
+        keyserver: str = "pgp.mit.edu",
+        extra_args: list[str] | None = None,
+    ) -> StatusHandler:
         """
         search a keyserver by query (using the `--search-keys` option).
 
@@ -955,15 +973,15 @@ class GPG:
             logger.debug("line: %r", line.rstrip())
             if not line:  # sometimes get blank lines on Windows
                 continue
-            L = line.strip().split(":")
-            if not L:  # pragma: no cover
+            fields = line.strip().split(":")
+            if not fields:  # pragma: no cover
                 continue
-            keyword = L[0]
+            keyword = fields[0]
             if keyword in valid_keywords:
-                getattr(result, keyword)(L)
+                getattr(result, keyword)(fields)
         return result
 
-    def auto_locate_key(self, email, mechanisms=None, **kwargs):
+    def auto_locate_key(self, email: str, mechanisms: list[str] | None = None, **kwargs: list[str]) -> StatusHandler:
         """
         Auto locate a public key by `email`.
 
@@ -987,21 +1005,21 @@ class GPG:
         self._decode_result(result)
         return result
 
-    def gen_key(self, input: str) -> GenKeyHandler:
+    def gen_key(self, key_input: str) -> GenKeyHandler:
         """
         Generate a key; you might use `gen_key_input()` to create the input.
 
         Args:
-            input (str): The input to the key creation operation.
+            key_input (str): The input to the key creation operation.
         """
         args = ["--gen-key"]
         result = self.result_map["generate"](self)
-        f = _make_binary_stream(input, self.encoding)
+        f = _make_binary_stream(key_input, self.encoding)
         self._handle_io(args, f, result, binary=True)
         f.close()
         return result
 
-    def gen_key_input(self, **kwargs) -> str:
+    def gen_key_input(self, **kwargs: bool | str | int) -> str:
         """
         Generate `--gen-key` input  (see `gpg` documentation in DETAILS).
 
@@ -1013,10 +1031,8 @@ class GPG:
 
         parms = {}
         no_protection = kwargs.pop("no_protection", False)
-        for key, val in list(kwargs.items()):
-            key = key.replace("_", "-").title()
-            if str(val).strip():  # skip empty strings
-                parms[key] = val
+        for key, val in [item for item in kwargs.items() if str(item[1]).strip()]:
+            parms[key.replace("_", "-").title()] = val
         parms.setdefault("Key-Type", "RSA")
         if "key_curve" not in kwargs:
             parms.setdefault("Key-Length", 2048)
@@ -1032,27 +1048,30 @@ class GPG:
         out += "%commit\n"
         return out
 
-        # Key-Type: RSA
-        # Key-Length: 1024
-        # Name-Real: ISdlink Server on %s
-        # Name-Comment: Created by %s
-        # Name-Email: isdlink@%s
-        # Expire-Date: 0
-        # %commit
-        #
-        #
-        # Key-Type: DSA
-        # Key-Length: 1024
-        # Subkey-Type: ELG-E
-        # Subkey-Length: 1024
-        # Name-Real: Joe Tester
-        # Name-Comment: with stupid passphrase
-        # Name-Email: joe@foo.bar
-        # Expire-Date: 0
-        # Passphrase: abc
-        # %pubring foo.pub
-        # %secring foo.sec
-        # %commit
+        """
+        Key-Type: RSA
+        Key-Length: 1024
+        Name-Real: ISdlink Server on %s
+        Name-Comment: Created by %s
+        Name-Email: isdlink@%s
+        Expire-Date: 0
+        %commit
+
+
+        Key-Type: DSA
+        Key-Length: 1024
+        Subkey-Type: ELG-E
+        Subkey-Length: 1024
+        Name-Real: Joe Tester
+        Name-Comment: with stupid passphrase
+        Name-Email: joe@foo.bar
+        Expire-Date: 0
+        Passphrase: abc
+        %pubring foo.pub
+        %secring foo.sec
+        %commit
+        """
+        return None
 
     def add_subkey(
         self,
@@ -1076,7 +1095,7 @@ class GPG:
 
             expire (str): The expiration date of the subkey.
         """
-        if self.version[0] < 2:
+        if self.version[0] < 2:  # noqa: PLR2004
             msg = "Not available in GnuPG 1.x"
             raise NotImplementedError(msg)
         if not master_key:  # pragma: no cover
@@ -1099,10 +1118,11 @@ class GPG:
     # ENCRYPTION
     #
 
-    def encrypt_file(
+    def encrypt_file(  # noqa: PLR0913
         self,
         fileobj_or_path: BytesIO | str,
         recipients: str | list[str] | tuple[str, str] | None,
+        *,
         sign: str | None = None,
         always_trust: bool = False,
         passphrase: str | None = None,
@@ -1174,7 +1194,7 @@ class GPG:
         self,
         data: str | bytes,
         recipients: str | list[str] | tuple[str, str] | None,
-        **kwargs,
+        **kwargs: str | bool | list[str],
     ) -> CryptHandler:
         """
         Encrypt the message contained in the string *data* for *recipients*. This method delegates most of the work to
@@ -1205,7 +1225,7 @@ class GPG:
         data.close()
         return result
 
-    def decrypt(self, message: str, **kwargs) -> CryptHandler:
+    def decrypt(self, message: str, **kwargs: str | list[str]) -> CryptHandler:
         """
         Decrypt the data in *message*. This method delegates most of the work to
         `decrypt_file()`.
@@ -1231,6 +1251,7 @@ class GPG:
     def decrypt_file(
         self,
         fileobj_or_path: str | bytes | BufferedReader | TextIOWrapper | BytesIO,
+        *,
         always_trust: bool = False,
         passphrase: str | None = None,
         output: str | None = None,
@@ -1262,11 +1283,11 @@ class GPG:
         if extra_args:  # pragma: no cover
             args.extend(extra_args)
         result = self.result_map["crypt"](self)
-        self._handle_io(args, fileobj_or_path, result, passphrase, binary=True)
-        # logger.debug('decrypt result[:100]: %r', result.data[:100])
+        self._handle_io(args, fileobj_or_path, result, passphrase=passphrase, binary=True)
+        logger.debug("decrypt result[:100]: %r", result.data[:100])
         return result
 
-    def get_recipients(self, message: str, **kwargs) -> list[str]:
+    def get_recipients(self, message: str, **kwargs: list[str]) -> list[str]:
         """Get the list of recipients for an encrypted message. This method delegates most of the work to
         `get_recipients_file()`.
 
@@ -1282,7 +1303,7 @@ class GPG:
         data.close()
         return result
 
-    def get_recipients_file(self, fileobj_or_path: BytesIO | str, extra_args: None = None) -> list[str]:
+    def get_recipients_file(self, fileobj_or_path: BytesIO | str, extra_args: list[str] | None = None) -> list[str]:
         """
         Get the list of recipients for an encrypted message in a file or file-like object.
 
@@ -1296,10 +1317,7 @@ class GPG:
             args.extend(extra_args)
         result = self.result_map["crypt"](self)
         self._handle_io(args, fileobj_or_path, result, binary=True)
-        ids = []
-        for m in PUBLIC_KEY_RE.finditer(result.stderr):
-            ids.append(m.group(1))
-        return ids
+        return [m.group(1) for m in PUBLIC_KEY_RE.finditer(result.stderr)]
 
     def trust_keys(self, fingerprints: str | list[str], trustlevel: str) -> StatusHandler:
         """

@@ -48,7 +48,7 @@ class SearchKeysHandler(StatusHandler, list):
         result["sigs"] = []
         return result
 
-    def pub(self, args) -> None:
+    def pub(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """
@@ -66,5 +66,5 @@ class SearchKeysHandler(StatusHandler, list):
         self.curkey["uids"].append(uid)
         self.uids.append(uid)
 
-    def handle_status(self, key, value) -> None:  # pragma: no cover
+    def handle_status(self, key: str, value: str) -> None:  # pragma: no cover
         pass
