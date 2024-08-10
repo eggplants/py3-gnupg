@@ -4,7 +4,8 @@ A test harness for gnupg.py.
 Copyright (C) 2008-2024 Vinay Sajip. All rights reserved.
 """
 
-import argparse
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -12,23 +13,12 @@ import os.path
 import re
 import shutil
 import stat
-import sys
 import tempfile
 import unittest
-
-try:
-    unicode
-except NameError:
-    unicode = str
 
 import pytest
 
 import gnupg
-
-__author__ = "Vinay Sajip"
-__date__ = "$12-Dec-2023 07:57:43$"
-
-ALL_TESTS = True
 
 gnupg.log_everything = True
 
@@ -172,14 +162,14 @@ tO8f06R3yfjxLRD8y89frVP3+tGMvt2yGOd5TT0zht5yYcG6QkiHlfdgXqeE8nsU
 """
 
 
-def is_list_with_len(o, n):
+def is_list_with_len(o: object, n: int) -> bool:
     return isinstance(o, list) and len(o) == n
 
 
 BASE64_PATTERN = re.compile(r"^(?:[A-Z0-9+/]{4})*(?:[A-Z0-9+/]{2}==|[A-Z0-9+/]{3}=)?$", re.IGNORECASE)
 
 
-def get_key_data(s):
+def get_key_data(s: str) -> str:
     lines = s.split("\n")
     result = ""
     for line in lines:
@@ -189,7 +179,7 @@ def get_key_data(s):
     return result
 
 
-def compare_keys(k1, k2):
+def compare_keys(k1: str, k2: str) -> bool:
     "Compare ASCII keys"
     # See issue #57: we need to compare only the actual key data,
     # ignoring things like spurious blank lines
@@ -208,7 +198,7 @@ if ENABLE_TOFU:  # pragma: no cover
     GPG_CONFIG = "trust-model tofu+pgp\ntofu-default-policy unknown\n"
 
 
-def prepare_homedir(hd) -> None:
+def prepare_homedir(hd: str) -> None:
     if not os.path.isdir(hd):  # pragma: no cover
         os.makedirs(hd)
     os.chmod(hd, 0x1C0)
@@ -222,7 +212,6 @@ def prepare_homedir(hd) -> None:
 
 
 class GPGTestCase(unittest.TestCase):
-
     def setUp(self) -> None:
         ident = self.id().rsplit(".", 1)[-1]
         logger.debug(f"-- {ident} starting ---------------------------")
@@ -267,7 +256,9 @@ class GPGTestCase(unittest.TestCase):
         private_keys = self.gpg.list_keys(secret=True)
         assert is_list_with_len(private_keys, 0), "Empty list expected"
 
-    def generate_key(self, first_name, last_name, domain, passphrase=None, with_subkey=True):
+    def generate_key(
+        self, first_name: str, last_name: str, domain: str, passphrase: str | None = None, with_subkey: bool = True,
+    ) -> gnupg.GenKeyHandler:
         "Generate a key"
         params = {
             "Key-Type": "DSA",
@@ -292,7 +283,7 @@ class GPGTestCase(unittest.TestCase):
         cmd = self.gpg.gen_key_input(**params)
         return self.gpg.gen_key(cmd)
 
-    def do_key_generation(self):
+    def do_key_generation(self) -> gnupg.GenKeyHandler:
         "Test that key generation succeeds"
         result = self.generate_key("Barbara", "Brown", "beta.com")
         assert None is not result, "Non-null result"
@@ -359,11 +350,8 @@ class GPGTestCase(unittest.TestCase):
         uid = uids[0]
         assert uid == "Test Name (Funny chars: \r\n\x0c\x0b\x00\x08) <test.name@example.com>"
 
-    @unittest.skipIf(os.name == "nt", "Test requires POSIX-style permissions")
+    @pytest.mark.skipIf(os.name == "nt", "Test requires POSIX-style permissions")
     def test_key_generation_failure(self) -> None:
-        if self.gpg.version < (2, 0):  # pragma: no cover
-            msg = "gpg 1.x hangs in this test"
-            raise unittest.SkipTest(msg)
         if not os.path.exists("rokeys"):  # pragma: no cover
             os.mkdir("rokeys")
         os.chmod("rokeys", 0o400)  # no one can write/search this directory
@@ -414,9 +402,6 @@ class GPGTestCase(unittest.TestCase):
 
     def test_add_subkey(self) -> None:
         "Test that subkeys can be added"
-        if self.gpg.version[0] < 2:  # pragma: no cover
-            msg = "Feature unavailable in GnuPG 1.x"
-            raise unittest.SkipTest(msg)
         master_key = self.generate_key("Charlie", "Clark", "gamma.com", passphrase="123", with_subkey=False)
         assert master_key.returncode == 0, "Non-zero return code"
 
@@ -431,9 +416,6 @@ class GPGTestCase(unittest.TestCase):
 
     def test_add_subkey_with_invalid_key_type(self) -> None:
         "Test that subkey generation handles invalid key type"
-        if self.gpg.version[0] < 2:  # pragma: no cover
-            msg = "Feature unavailable in GnuPG 1.x"
-            raise unittest.SkipTest(msg)
         master_key = self.generate_key("Charlie", "Clark", "gamma.com", passphrase="123", with_subkey=False)
         assert master_key.returncode == 0, "Non-zero return code"
 
@@ -451,9 +433,6 @@ class GPGTestCase(unittest.TestCase):
 
     def test_deletion_subkey(self) -> None:
         "Test that subkey deletion works"
-        if self.gpg.version[0] < 2:  # pragma: no cover
-            msg = "Feature unavailable in GnuPG 1.x"
-            raise unittest.SkipTest(msg)
         master_key = self.generate_key("Charlie", "Clark", "gamma.com", passphrase="123", with_subkey=False)
         assert master_key.returncode == 0, "Non-zero return code"
 
@@ -497,9 +476,6 @@ class GPGTestCase(unittest.TestCase):
 
     def test_list_subkey_after_generation(self) -> None:
         "Test that after subkey generation, the generated subkey is available"
-        if self.gpg.version[0] < 2:  # pragma: no cover
-            msg = "Feature unavailable in GnuPG 1.x"
-            raise unittest.SkipTest(msg)
         self.test_list_keys_initial()
 
         master_key = self.generate_key("Charlie", "Clark", "gamma.com", passphrase="123", with_subkey=False)
@@ -1037,9 +1013,6 @@ class GPGTestCase(unittest.TestCase):
 
     def test_subkey_signature_file(self) -> None:
         "Test that signing and verification works via the GPG output for subkeys"
-        if self.gpg.version[0] < 2:  # pragma: no cover
-            msg = "Feature unavailable in GnuPG 1.x"
-            raise unittest.SkipTest(msg)
         master_key = self.generate_key("Charlie", "Clark", "gamma.com", passphrase="123", with_subkey=False)
         assert master_key.returncode == 0, "Non-zero return code"
 
@@ -1175,7 +1148,7 @@ class GPGTestCase(unittest.TestCase):
         os.close(decfno)
         self.do_file_encryption_and_decryption(encfname, decfname)
 
-    @unittest.skipIf(os.name == "nt", "Test not suitable for Windows")
+    @pytest.mark.skipIf(os.name == "nt", "Test not suitable for Windows")
     def test_invalid_outputs(self) -> None:
         "Test encrypting to invalid output files"
         encfno, encfname = tempfile.mkstemp(prefix="pygpg-test-")
@@ -1518,7 +1491,7 @@ class GPGTestCase(unittest.TestCase):
         finally:
             os.remove(fn)
 
-    @unittest.skipIf("CI" not in os.environ, "Don't test locally")
+    @pytest.mark.skipIf("CI" not in os.environ, "Don't test locally")
     def test_auto_key_locating(self) -> None:
         # Let's hope ProtonMail doesn't change their key anytime soon
         expected_fingerprint = "90E619A84E85330A692F6D81A655882018DBFA9D"
@@ -1530,82 +1503,3 @@ class GPGTestCase(unittest.TestCase):
 
     def test_passphrase_encoding(self) -> None:
         self.assertRaises(UnicodeEncodeError, self.gpg.decrypt, "foo", passphrase="I’ll")
-
-
-TEST_GROUPS = {
-    "sign": {"test_signature_verification", "test_signature_file", "test_subkey_signature_file"},
-    "crypt": {
-        "test_encryption_and_decryption",
-        "test_file_encryption_and_decryption",
-        "test_filenames_with_spaces",
-        "test_invalid_outputs",
-        "test_no_such_key",
-    },
-    "key": {
-        "test_deletion",
-        "test_import_and_export",
-        "test_list_keys_after_generation",
-        "test_list_signatures",
-        "test_key_generation_with_invalid_key_type",
-        "test_key_generation_with_escapes",
-        "test_key_generation_input",
-        "test_key_generation_with_colons",
-        "test_search_keys",
-        "test_scan_keys",
-        "test_scan_keys_mem",
-        "test_key_trust",
-        "test_add_subkey",
-        "test_add_subkey_with_invalid_key_type",
-        "test_deletion_subkey",
-        "test_list_subkey_after_generation",
-    },
-    "import": {"test_import_only", "test_doctest_import_keys"},
-    "basic": {"test_environment", "test_list_keys_initial", "test_nogpg", "test_make_args", "test_quote_with_shell"},
-    "test": {"test_passphrase_encoding"},
-}
-
-
-def suite(args=None):
-    if args is None:  # pragma: no cover
-        args = sys.argv[1:]
-    if not args:
-        result = unittest.TestLoader().loadTestsFromTestCase(GPGTestCase)
-    else:  # pragma: no cover
-        tests = set()
-        for arg in args:
-            if arg in TEST_GROUPS:
-                tests.update(TEST_GROUPS[arg])
-            else:
-                pass
-        result = unittest.TestSuite(list(map(GPGTestCase, tests)))
-    return result
-
-
-def init_logging() -> None:
-    logging.basicConfig(
-        level=logging.DEBUG,
-        filename="test_gnupg.log",
-        filemode="w",
-        format="%(asctime)s %(levelname)-5s %(name)-10s %(threadName)-10s %(lineno)4d %(message)s",
-    )
-
-
-def main():
-    init_logging()
-    logger.debug("Python version: %s", sys.version.replace("\n", " "))
-    adhf = argparse.ArgumentDefaultsHelpFormatter
-    ap = argparse.ArgumentParser(formatter_class=adhf, prog="test_gnupg")
-    aa = ap.add_argument
-    aa("-v", "--verbose", default=False, action="store_true", help="Increase verbosity")
-    options, args = ap.parse_known_args()
-    tests = suite(args)
-    verbosity = 2 if options.verbose else 1
-    results = unittest.TextTestRunner(verbosity=verbosity).run(tests)
-    failed = not results.wasSuccessful()
-    if failed and "TOXENV" in os.environ and os.name != "posix":  # pragma: no cover
-        os.system("type test_gnupg.log")
-    return failed
-
-
-if __name__ == "__main__":
-    sys.exit(main())
