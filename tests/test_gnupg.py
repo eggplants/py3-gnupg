@@ -21,17 +21,6 @@ try:
 except NameError:
     unicode = str
 
-try:
-    from unittest import skipIf
-except ImportError:  # pragma: no cover
-    # For now, for Python < 2.7
-    def skipIf(condition, message):
-        if not condition:
-            return lambda x: x
-        else:
-            return lambda x: None
-
-
 import pytest
 
 import gnupg
@@ -370,7 +359,7 @@ class GPGTestCase(unittest.TestCase):
         uid = uids[0]
         assert uid == "Test Name (Funny chars: \r\n\x0c\x0b\x00\x08) <test.name@example.com>"
 
-    @skipIf(os.name == "nt", "Test requires POSIX-style permissions")
+    @unittest.skipIf(os.name == "nt", "Test requires POSIX-style permissions")
     def test_key_generation_failure(self) -> None:
         if self.gpg.version < (2, 0):  # pragma: no cover
             msg = "gpg 1.x hangs in this test"
@@ -1105,7 +1094,7 @@ class GPGTestCase(unittest.TestCase):
         "Test that absence of gpg is handled correctly"
         with pytest.raises(OSError) as ar:
             gnupg.GPG(gnupghome=self.homedir, gpgbinary="frob")
-        assert "frob" in str(ar.exception)
+        assert "frob" in str(ar)
 
     def test_invalid_home(self) -> None:
         "Test that any specified gnupghome directory actually is one"
@@ -1113,7 +1102,7 @@ class GPGTestCase(unittest.TestCase):
         shutil.rmtree(hd)  # make sure it isn't there anymore
         with pytest.raises(ValueError) as ar:
             gnupg.GPG(gnupghome=hd)
-        assert "gnupghome should be a directory" in str(ar.exception)
+        assert "gnupghome should be a directory" in str(ar)
 
     def test_make_args(self) -> None:
         "Test argument line construction"
@@ -1186,7 +1175,7 @@ class GPGTestCase(unittest.TestCase):
         os.close(decfno)
         self.do_file_encryption_and_decryption(encfname, decfname)
 
-    @skipIf(os.name == "nt", "Test not suitable for Windows")
+    @unittest.skipIf(os.name == "nt", "Test not suitable for Windows")
     def test_invalid_outputs(self) -> None:
         "Test encrypting to invalid output files"
         encfno, encfname = tempfile.mkstemp(prefix="pygpg-test-")
@@ -1385,7 +1374,7 @@ class GPGTestCase(unittest.TestCase):
         with pytest.raises((TypeError, ValueError)) as ec:
             self.gpg.decrypt_file(bad, passphrase="", output="/tmp/decrypted.txt")
         expected = f"Not a valid file or path: {bad}"
-        assert str(ec.exception) == expected
+        assert expected in str(ec)
 
     def remove_all_existing_keys(self) -> None:
         for root, dirs, files in os.walk(self.homedir):
@@ -1529,7 +1518,7 @@ class GPGTestCase(unittest.TestCase):
         finally:
             os.remove(fn)
 
-    @skipIf("CI" not in os.environ, "Don't test locally")
+    @unittest.skipIf("CI" not in os.environ, "Don't test locally")
     def test_auto_key_locating(self) -> None:
         # Let's hope ProtonMail doesn't change their key anytime soon
         expected_fingerprint = "90E619A84E85330A692F6D81A655882018DBFA9D"

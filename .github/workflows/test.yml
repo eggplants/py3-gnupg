@@ -27,11 +27,12 @@ jobs:
 
     - name: Install winget
       if: ${{ matrix.os == 'windows-latest' }}
-      uses: Cyberboss/install-winget@v1
-    - name: Install Windows-only dependencies
-      if: ${{ matrix.os == 'windows-latest' }}
       run: |
-        winget install --id GnuPG.GnuPG --disable-interactivity --accept-source-agreements
+        $env:PATH = "C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\ProgramData\chocolatey\bin"
+        [Environment]::SetEnvironmentVariable("Path", $env:PATH, "Machine")
+        choco install gnupg
+        echo "C:\Program Files (x86)\GnuPG\bin" >> $env:GITHUB_PATH
+
     - name: Test
       if: ${{ runner.os != 'Linux' }}
       run: |
