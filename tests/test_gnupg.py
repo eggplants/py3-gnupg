@@ -9,12 +9,12 @@ from __future__ import annotations
 import json
 import logging
 import os
-import os.path
 import re
 import shutil
 import stat
 import tempfile
 import unittest
+from pathlib import Path
 
 import pytest
 
@@ -159,7 +159,7 @@ tO8f06R3yfjxLRD8y89frVP3+tGMvt2yGOd5TT0zht5yYcG6QkiHlfdgXqeE8nsU
 2392Xn/RETq6xCj3kG6K3wbWqh0=
 =2A5s
 -----END PGP PRIVATE KEY BLOCK-----
-"""
+"""  # noqa: S105
 
 
 def is_list_with_len(o: object, n: int) -> bool:
@@ -198,16 +198,16 @@ if ENABLE_TOFU:  # pragma: no cover
     GPG_CONFIG = "trust-model tofu+pgp\ntofu-default-policy unknown\n"
 
 
-def prepare_homedir(hd: str) -> None:
-    if not os.path.isdir(hd):  # pragma: no cover
-        os.makedirs(hd)
-    os.chmod(hd, 0x1C0)
-    fn = os.path.join(hd, "gpg-agent.conf")
-    with open(fn, "w") as f:
+def prepare_homedir(path: Path) -> None:
+    if not path.is_dir():  # pragma: no cover
+        path.makedirs(parent=True)
+    path.chmod(0x1C0)
+    ga_conf_path = path / "gpg-agent.conf"
+    with ga_conf_path.open("w") as f:
         f.write(AGENT_CONFIG)
     if ENABLE_TOFU:  # pragma: no cover
-        fn = os.path.join(hd, "gpg.conf")
-        with open(fn, "w") as f:
+        conf_path = path / "gpg.conf"
+        with open(conf_path, "w") as f:
             f.write(GPG_CONFIG)
 
 
@@ -216,15 +216,15 @@ class GPGTestCase(unittest.TestCase):
         ident = self.id().rsplit(".", 1)[-1]
         logger.debug(f"-- {ident} starting ---------------------------")
         if "STATIC_TEST_HOMEDIR" not in os.environ:
-            hd = tempfile.mkdtemp(prefix="keys-")
+            keys_path = Path(tempfile.mkdtemp(prefix="keys-"))
         else:  # pragma: no cover
-            hd = os.path.join(os.getcwd(), "keys")
-            if os.path.exists(hd):
-                assert os.path.isdir(hd), f"Not a directory: {hd}"
-                shutil.rmtree(hd, ignore_errors=True)
-        prepare_homedir(hd)
-        self.homedir = hd
-        self.gpg = gpg = gnupg.GPG(gnupghome=hd, gpgbinary=GPGBINARY)
+            keys_path = Path.cwd() / "keys"
+            if keys_path.exists():
+                assert keys_path.is_dir(), f"Not a directory: {keys_path}"
+                shutil.rmtree(keys_path, ignore_errors=True)
+        prepare_homedir(keys_path)
+        self.homedir = keys_path
+        self.gpg = gpg = gnupg.GPG(gnupghome=str(keys_path), gpgbinary=GPGBINARY)
         v = gpg.version
         if v:
             if v >= (2,):  # pragma: no cover
@@ -245,8 +245,8 @@ class GPGTestCase(unittest.TestCase):
 
     def test_environment(self) -> None:
         "Test the environment by ensuring that setup worked"
-        hd = self.homedir
-        assert os.path.exists(hd) and os.path.isdir(hd), f"Not an existing directory: {hd}"
+        hd_path = self.homedir
+        assert hd_path.exists() and hd_path.is_dir(), f"Not an existing directory: {hd_path}"
 
     def test_list_keys_initial(self) -> None:
         "Test that initially there are no keys"
@@ -257,7 +257,12 @@ class GPGTestCase(unittest.TestCase):
         assert is_list_with_len(private_keys, 0), "Empty list expected"
 
     def generate_key(
-        self, first_name: str, last_name: str, domain: str, passphrase: str | None = None, with_subkey: bool = True,
+        self,
+        first_name: str,
+        last_name: str,
+        domain: str,
+        passphrase: str | None = None,
+        with_subkey: bool = True,
     ) -> gnupg.GenKeyHandler:
         "Generate a key"
         params = {
@@ -350,7 +355,7 @@ class GPGTestCase(unittest.TestCase):
         uid = uids[0]
         assert uid == "Test Name (Funny chars: \r\n\x0c\x0b\x00\x08) <test.name@example.com>"
 
-    @pytest.mark.skipIf(os.name == "nt", "Test requires POSIX-style permissions")
+    @pytest.mark.skipif(os.name == "nt", reason="Test requires POSIX-style permissions")
     def test_key_generation_failure(self) -> None:
         if not os.path.exists("rokeys"):  # pragma: no cover
             os.mkdir("rokeys")
@@ -1148,7 +1153,7 @@ class GPGTestCase(unittest.TestCase):
         os.close(decfno)
         self.do_file_encryption_and_decryption(encfname, decfname)
 
-    @pytest.mark.skipIf(os.name == "nt", "Test not suitable for Windows")
+    @pytest.mark.skipif(os.name == "nt", reason="Test not suitable for Windows")
     def test_invalid_outputs(self) -> None:
         "Test encrypting to invalid output files"
         encfno, encfname = tempfile.mkstemp(prefix="pygpg-test-")
@@ -1491,7 +1496,7 @@ class GPGTestCase(unittest.TestCase):
         finally:
             os.remove(fn)
 
-    @pytest.mark.skipIf("CI" not in os.environ, "Don't test locally")
+    @pytest.mark.skipif("CI" not in os.environ, reason="Don't test locally")
     def test_auto_key_locating(self) -> None:
         # Let's hope ProtonMail doesn't change their key anytime soon
         expected_fingerprint = "90E619A84E85330A692F6D81A655882018DBFA9D"

@@ -19,6 +19,7 @@ class StatusHandler:
             gpg (GPG): The :class:`GPG` instance in use.
         """
         self.gpg = gpg
+        self.data: str | None = None
 
     def handle_status(self, key, value) -> NoReturn:
         """

@@ -7,19 +7,10 @@ import re
 import socket
 import threading
 from io import BufferedReader, BufferedWriter, BytesIO, TextIOWrapper
+from pathlib import Path
 from subprocess import PIPE, Popen
+from types import MappingProxyType
 from typing import TYPE_CHECKING
-
-from gnupg.handlers.add_subkey_handler import AddSubkeyHandler
-from gnupg.handlers.crypt_handler import CryptHandler
-from gnupg.handlers.delete_result_handler import DeleteResultHandler
-from gnupg.handlers.gen_key_handler import GenKeyHandler
-from gnupg.handlers.import_result_handler import ImportResultHandler
-from gnupg.handlers.list_keys_handler import ListKeysHandler
-from gnupg.handlers.scan_keys_handler import ScanKeysHandler
-from gnupg.handlers.sign_handler import SignHandler
-from gnupg.handlers.trust_result_handler import TrustResultHandler
-from gnupg.handlers.verify_handler import VerifyHandler
 
 from .handlers import (
     AddSubkeyHandler,
@@ -71,26 +62,29 @@ class GPG:
 
     buffer_size = 16384  # override in instance if needed
 
-    result_map = {
-        "crypt": CryptHandler,
-        "delete": DeleteResultHandler,
-        "generate": GenKeyHandler,
-        "addSubkey": AddSubkeyHandler,
-        "import": ImportResultHandler,
-        "send": SendResultHandler,
-        "list": ListKeysHandler,
-        "scan": ScanKeysHandler,
-        "search": SearchKeysHandler,
-        "sign": SignHandler,
-        "trust": TrustResultHandler,
-        "verify": VerifyHandler,
-        "export": ExportResultHandler,
-        "auto-locate-key": AutoLocateKeyHandler,
-    }
+    result_map = MappingProxyType(
+        {
+            "crypt": CryptHandler,
+            "delete": DeleteResultHandler,
+            "generate": GenKeyHandler,
+            "addSubkey": AddSubkeyHandler,
+            "import": ImportResultHandler,
+            "send": SendResultHandler,
+            "list": ListKeysHandler,
+            "scan": ScanKeysHandler,
+            "search": SearchKeysHandler,
+            "sign": SignHandler,
+            "trust": TrustResultHandler,
+            "verify": VerifyHandler,
+            "export": ExportResultHandler,
+            "auto-locate-key": AutoLocateKeyHandler,
+        },
+    )
     "A map of GPG operations to result object types."
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
+        *,
         gpgbinary: str = "gpg",
         gnupghome: str | None = None,
         verbose: bool = False,
@@ -119,11 +113,11 @@ class GPG:
             env (dict): A dict of environment variables to be used for the GPG subprocess.
         """
         self.gpgbinary = gpgbinary
-        self.gnupghome = gnupghome
+        self.gnupghome = None if not gnupghome else Path(gnupghome)
         self.env = env
         # issue 112: fail if the specified value isn't a directory
-        if gnupghome and not os.path.isdir(gnupghome):
-            msg = f"gnupghome should be a directory (it isn't): {gnupghome}"
+        if self.gnupghome and not self.gnupghome.is_dir():
+            msg = f"gnupghome should be a directory (it isn't): {self.gnupghome}"
             raise ValueError(msg)
         if keyring:
             # Allow passing a string or another iterable. Make it uniformly
@@ -148,8 +142,8 @@ class GPG:
         # falling back to utf-8, because gpg itself uses latin-1 as the default
         # encoding.
         self.encoding = "latin-1"
-        if gnupghome and not os.path.isdir(self.gnupghome):  # pragma: no cover
-            os.makedirs(self.gnupghome, 0o700)
+        if self.gnupghome and not self.gnupghome.is_dir():  # pragma: no cover
+            self.gnupghome.mkdir(mode=0o700, parents=True)
         try:
             p = self._open_subprocess(["--list-config", "--with-colons"])
         except OSError:
@@ -189,7 +183,7 @@ class GPG:
             cmd[1:1] = ["--pinentry-mode", "loopback"]
         cmd.extend(["--fixed-list-mode", "--batch", "--with-colons"])
         if self.gnupghome:
-            cmd.extend(["--homedir", self.gnupghome])
+            cmd.extend(["--homedir", str(self.gnupghome)])
         if self.keyring:
             cmd.append("--no-default-keyring")
             for fn in self.keyring:
@@ -1307,7 +1301,7 @@ class GPG:
             ids.append(m.group(1))
         return ids
 
-    def trust_keys(self, fingerprints: str | list[str], trustlevel: str) -> TrustResultHandler:
+    def trust_keys(self, fingerprints: str | list[str], trustlevel: str) -> StatusHandler:
         """
         Set the trust level for one or more keys.
 
@@ -1333,11 +1327,9 @@ class GPG:
 
         try:
             fd, fn = tempfile.mkstemp(prefix="pygpg-")
-            lines = []
             if isinstance(fingerprints, str):
                 fingerprints = [fingerprints]
-            for f in fingerprints:
-                lines.append(f"{f}:{trustlevel}:")
+            lines = [f"{f}:{trustlevel}:" for f in fingerprints]
             # The trailing newline is required!
             s = os.linesep.join(lines) + os.linesep
             logger.debug("writing ownertrust info: %s", s)
@@ -1349,5 +1341,5 @@ class GPG:
             if p.returncode != 0:
                 raise ValueError("gpg returned an error - return code %d" % p.returncode)
         finally:
-            os.remove(fn)
+            Path(fn).unlink()
         return result
