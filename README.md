@@ -1,7 +1,7 @@
 # py3-gnupg
 
 > [!NOTE]  
-> **THIS PROJECT IS A FORK OF [python-gnupg](https://github.com/vsajip/python-gnupg), BUT FOR Python3 ONLY.**
+> **THIS PROJECT IS A FORK OF [python-gnupg](https://github.com/vsajip/python-gnupg), BUT FOR GnuPG 2 and Python3 ONLY.**
 
 [![Maintainability](
   <https://api.codeclimate.com/v1/badges/210899aaefb3834644a7/maintainability>
