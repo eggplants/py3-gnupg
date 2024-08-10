@@ -59,6 +59,11 @@ taskipy = "^1.10.3"
 pytest = ">=7.2.2,<9.0.0"
 pytest-cov = ">=4,<6"
 
+
+[tool.poetry.group.docs.dependencies]
+portray = "^1.8.0"
+setuptools = "^72.1.0"
+
 [tool.black]
 line-length = 120
 target-version = [
@@ -74,18 +79,13 @@ lint.ignore = [
   "ANN101",
   "D",
 ]
-lint.per-file-ignores."docs/conf.py" = [
-  "ANN001", # Missing type annotation for function argument
-  "ARG001", # Unused function argument
-  "ERA001", # Found commented-out code
-]
-
-# lint.mccabe = 18
 
 lint.per-file-ignores."tests/*test_*.py" = [
   "INP001", # File tests/test_*.py is part of an implicit namespace package. Add an __init__.py.
   "S101",   # Use of assert detected
 ]
+
+lint.mccabe.max-complexity = 26
 
 [tool.mypy]
 pretty = true
@@ -94,7 +94,7 @@ show_error_codes = true
 strict = true
 
 [tool.taskipy.tasks]
-test = "pytest --cov=python_gnupg --cov-report=term"
+test = "pytest --cov=gnupg --cov-report=term"
 "test:ci" = "task test --cov-report=xml:cov.xml"
 lint = "pre-commit run -a"
 profile = "python -m cProfile"
