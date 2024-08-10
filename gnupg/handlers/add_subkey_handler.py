@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from gnupg.helper import _get_logger
 
 from .status_handler import StatusHandler

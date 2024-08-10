@@ -1,7 +1,13 @@
+from __future__ import annotations
+
 import re
+from typing import TYPE_CHECKING
 
 from .helper import _set_fields
 from .status_handler import StatusHandler
+
+if TYPE_CHECKING:
+    from gnupg.gnupg import GPG
 
 ESCAPE_PATTERN = re.compile(r"\\x([0-9a-f][0-9a-f])", re.IGNORECASE)
 BASIC_ESCAPES = {
@@ -26,13 +32,13 @@ class SearchKeysHandler(StatusHandler, list):
     FIELDS = "type keyid algo length date expires".split()
     returncode = None
 
-    def __init__(self, gpg) -> None:
+    def __init__(self, gpg: GPG) -> None:
         StatusHandler.__init__(self, gpg)
         self.curkey = None
         self.fingerprints = []
         self.uids = []
 
-    def get_fields(self, args):
+    def get_fields(self, args: list[str]) -> dict[str, str]:
         """
         Internal method used to update the instance from a `gpg` status message.
         """
@@ -49,7 +55,7 @@ class SearchKeysHandler(StatusHandler, list):
         self.curkey = curkey = self.get_fields(args)
         self.append(curkey)
 
-    def uid(self, args) -> None:
+    def uid(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """

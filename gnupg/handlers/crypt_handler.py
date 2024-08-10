@@ -1,7 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from gnupg.helper import _get_logger
 
 from .text_handler import TextHandler
 from .verify_handler import VerifyHandler
+
+if TYPE_CHECKING:
+    from gnupg.gnupg import GPG
 
 logger = _get_logger(__name__)
 
@@ -11,7 +18,7 @@ class CryptHandler(VerifyHandler, TextHandler):
     This class handles status messages during encryption and decryption.
     """
 
-    def __init__(self, gpg) -> None:
+    def __init__(self, gpg: GPG) -> None:
         VerifyHandler.__init__(self, gpg)
         self.data = ""
         self.ok = False
@@ -19,7 +26,7 @@ class CryptHandler(VerifyHandler, TextHandler):
         self.status_detail = ""
         self.key_id = None
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> bool:
         return bool(self.ok)
 
     __bool__ = __nonzero__

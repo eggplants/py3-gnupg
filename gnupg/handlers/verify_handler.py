@@ -1,6 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from gnupg.helper import _get_logger
 
 from .status_handler import StatusHandler
+
+if TYPE_CHECKING:
+    from gnupg.gnupg import GPG
 
 logger = _get_logger(__name__)
 
@@ -41,7 +48,7 @@ class VerifyHandler(StatusHandler):
 
     returncode = None
 
-    def __init__(self, gpg) -> None:
+    def __init__(self, gpg: GPG) -> None:
         StatusHandler.__init__(self, gpg)
         self.valid = False
         self.fingerprint = self.creation_date = self.timestamp = None

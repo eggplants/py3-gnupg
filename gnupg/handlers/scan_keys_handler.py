@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .list_keys_handler import ListKeysHandler
 
 
@@ -6,7 +8,7 @@ class ScanKeysHandler(ListKeysHandler):
     This class handles status messages during scanning keys.
     """
 
-    def sub(self, args) -> None:
+    def sub(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """

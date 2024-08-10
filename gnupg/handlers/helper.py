@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any
+
 _INVALID_KEY_REASONS = {
     0: "no specific reason given",
     1: "not found",
@@ -33,7 +37,7 @@ def _determine_invalid_recipient_or_signer(s) -> str:  # pragma: no cover
     return f"{result}:{ident}"
 
 
-def _set_fields(target, fieldnames, args) -> None:
+def _set_fields(target: dict[Any, Any], fieldnames: list[str], args: list[str]) -> None:
     for i, var in enumerate(fieldnames):
         if i < len(args):
             target[var] = args[i]

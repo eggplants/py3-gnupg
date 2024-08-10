@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import logging
 import sys
 import threading
-from io import BytesIO
+from io import BufferedReader, BufferedWriter, BytesIO, TextIOWrapper
 
 
 def _get_logger(name):
@@ -14,24 +16,28 @@ def _get_logger(name):
 logger = _get_logger(__name__)
 
 
-def _make_binary_stream(s, encoding):
+def _make_binary_stream(s: str | bytes, encoding: str) -> BytesIO:
     if isinstance(s, str):
         s = s.encode(encoding)
     return BytesIO(s)
 
 
-def _is_sequence(instance):
+def _is_sequence(instance: tuple[str, str] | list[str] | str) -> bool:
     return isinstance(instance, (list, tuple, set, frozenset))
 
 
-def _write_passphrase(stream, passphrase, encoding) -> None:
+def _write_passphrase(stream: BufferedWriter, passphrase: str, encoding: str) -> None:
     passphrase = f"{passphrase}\n"
     passphrase = passphrase.encode(encoding)
     stream.write(passphrase)
     logger.debug("Wrote passphrase")
 
 
-def _threaded_copy_data(instream, outstream, buffer_size):
+def _threaded_copy_data(
+    instream: BufferedReader | BytesIO | TextIOWrapper,
+    outstream: BufferedWriter,
+    buffer_size: int,
+) -> threading.Thread:
     def copy_data(instream, outstream, buffer_size) -> None:
         # Copy one stream to another
         assert buffer_size > 0

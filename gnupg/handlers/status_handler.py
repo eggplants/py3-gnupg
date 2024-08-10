@@ -1,4 +1,9 @@
-from typing import NoReturn
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, NoReturn
+
+if TYPE_CHECKING:
+    from gnupg.gnupg import GPG
 
 
 class StatusHandler:
@@ -6,7 +11,7 @@ class StatusHandler:
     The base class for handling status messages from `gpg`.
     """
 
-    def __init__(self, gpg) -> None:
+    def __init__(self, gpg: GPG) -> None:
         """
         Initialize an instance.
 

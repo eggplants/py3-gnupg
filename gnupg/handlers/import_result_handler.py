@@ -1,6 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from gnupg.helper import _get_logger
 
 from .status_handler import StatusHandler
+
+if TYPE_CHECKING:
+    from gnupg.gnupg import GPG
 
 logger = _get_logger(__name__)
 
@@ -15,14 +22,14 @@ class ImportResultHandler(StatusHandler):
 
     returncode = None
 
-    def __init__(self, gpg) -> None:
+    def __init__(self, gpg: GPG) -> None:
         StatusHandler.__init__(self, gpg)
         self.results = []
         self.fingerprints = []
         for result in self.counts:
             setattr(self, result, 0)
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> bool:
         return bool(not self.not_imported and self.fingerprints)
 
     __bool__ = __nonzero__
@@ -81,7 +88,7 @@ class ImportResultHandler(StatusHandler):
         else:  # pragma: no cover
             logger.debug("message ignored: %s, %s", key, value)
 
-    def summary(self):
+    def summary(self) -> str:
         """
         Return a summary indicating how many keys were imported and how many were not imported.
         """

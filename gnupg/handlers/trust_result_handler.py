@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .delete_result_handler import DeleteResultHandler
 
 

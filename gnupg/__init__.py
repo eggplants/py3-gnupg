@@ -33,6 +33,8 @@ For the full documentation, see https://docs.red-dove.com/python-gnupg/ or
 https://gnupg.readthedocs.io/
 """
 
+from __future__ import annotations
+
 from .gnupg import GPG
 
 __version__ = "YANKED"

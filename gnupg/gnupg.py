@@ -1,11 +1,25 @@
+from __future__ import annotations
+
 import codecs
 import logging
 import os
 import re
 import socket
 import threading
-from io import BytesIO
+from io import BufferedReader, BufferedWriter, BytesIO, TextIOWrapper
 from subprocess import PIPE, Popen
+from typing import TYPE_CHECKING
+
+from gnupg.handlers.add_subkey_handler import AddSubkeyHandler
+from gnupg.handlers.crypt_handler import CryptHandler
+from gnupg.handlers.delete_result_handler import DeleteResultHandler
+from gnupg.handlers.gen_key_handler import GenKeyHandler
+from gnupg.handlers.import_result_handler import ImportResultHandler
+from gnupg.handlers.list_keys_handler import ListKeysHandler
+from gnupg.handlers.scan_keys_handler import ScanKeysHandler
+from gnupg.handlers.sign_handler import SignHandler
+from gnupg.handlers.trust_result_handler import TrustResultHandler
+from gnupg.handlers.verify_handler import VerifyHandler
 
 from .handlers import (
     AddSubkeyHandler,
@@ -24,6 +38,9 @@ from .handlers import (
     VerifyHandler,
 )
 from .helper import _get_logger, _is_sequence, _make_binary_stream, _threaded_copy_data, _write_passphrase
+
+if TYPE_CHECKING:
+    from gnupg.handlers.status_handler import StatusHandler
 
 VERSION_RE = re.compile(r"^cfg:version:(\d+(\.\d+)*)".encode("ascii"))
 HEX_DIGITS_RE = re.compile(r"[0-9a-f]+$", re.IGNORECASE)
@@ -74,14 +91,14 @@ class GPG:
 
     def __init__(
         self,
-        gpgbinary="gpg",
-        gnupghome=None,
-        verbose=False,
-        use_agent=False,
-        keyring=None,
-        options=None,
-        secret_keyring=None,
-        env=None,
+        gpgbinary: str = "gpg",
+        gnupghome: str | None = None,
+        verbose: bool = False,
+        use_agent: bool = False,
+        keyring: str | None = None,
+        options: None = None,
+        secret_keyring: None = None,
+        env: None = None,
     ) -> None:
         """Initialize a GPG process wrapper.
 
@@ -155,7 +172,7 @@ class GPG:
         # can't be too strict.
         self.check_fingerprint_collisions = False
 
-    def make_args(self, args, passphrase):
+    def make_args(self, args: list[str], passphrase: bool) -> list[str]:
         """
         Make a list of command line elements for GPG. The value of ``args``
         will be appended. The ``passphrase`` argument needs to be True if
@@ -189,7 +206,7 @@ class GPG:
         cmd.extend(args)
         return cmd
 
-    def _open_subprocess(self, args, passphrase=False):
+    def _open_subprocess(self, args: list[str], passphrase: bool = False) -> Popen:
         # Internal method: open a pipe to a GPG subprocess and return
         # the file objects for communicating with it.
 
@@ -253,7 +270,13 @@ class GPG:
         # Join using b'' or '', as appropriate
         result.data = type(data)().join(chunks)
 
-    def _collect_output(self, process, result, writer=None, stdin=None):
+    def _collect_output(
+        self,
+        process: Popen,
+        result: StatusHandler,
+        writer: threading.Thread | None = None,
+        stdin: BufferedWriter | None = None,
+    ) -> int:
         """
         Drain the subprocesses output streams, writing the collected output to the result. If a writer thread (writing
         to the subprocess) is given, make sure it's joined before returning. If a stdin stream is given, close it
@@ -288,7 +311,7 @@ class GPG:
         stdout.close()
         return rc
 
-    def is_valid_file(self, fileobj):
+    def is_valid_file(self, fileobj: str | bytes | BufferedReader | TextIOWrapper | BytesIO) -> bool:
         """
         A simplistic check for a file-like object.
 
@@ -299,7 +322,10 @@ class GPG:
         """
         return hasattr(fileobj, "read")
 
-    def _get_fileobj(self, fileobj_or_path):
+    def _get_fileobj(
+        self,
+        fileobj_or_path: str | bytes | BufferedReader | TextIOWrapper | BytesIO,
+    ) -> BufferedReader | BytesIO | TextIOWrapper:
         if self.is_valid_file(fileobj_or_path):
             result = fileobj_or_path
         elif not isinstance(fileobj_or_path, str):
@@ -312,7 +338,14 @@ class GPG:
             result = open(fileobj_or_path, "rb")
         return result
 
-    def _handle_io(self, args, fileobj_or_path, result, passphrase=None, binary=False):
+    def _handle_io(
+        self,
+        args: list[str],
+        fileobj_or_path: str | bytes | BufferedReader | TextIOWrapper | BytesIO,
+        result: StatusHandler,
+        passphrase: str | None = None,
+        binary: bool = False,
+    ) -> StatusHandler:
         "Handle a call to GPG - pass input data, collect output data"
         # Handle a basic data call - pass data to GPG, handle the output
         # including status information. Garbage In, Garbage Out :)
@@ -339,7 +372,7 @@ class GPG:
     # SIGNATURE METHODS
     #
 
-    def sign(self, message, **kwargs):
+    def sign(self, message: bytes, **kwargs) -> SignHandler:
         """
         Sign a message. This method delegates most of the work to the `sign_file()` method.
 
@@ -366,7 +399,7 @@ class GPG:
         f.close()
         return result
 
-    def set_output_without_confirmation(self, args, output) -> None:
+    def set_output_without_confirmation(self, args: list[str], output: str) -> None:
         """
         If writing to a file which exists, avoid a confirmation message by
         updating the *args* value in place to set the output path and avoid
@@ -381,7 +414,7 @@ class GPG:
             args.extend(["--yes"])
         args.extend(["--output", output])
 
-    def is_valid_passphrase(self, passphrase):
+    def is_valid_passphrase(self, passphrase: str) -> bool:
         """
         Confirm that the passphrase doesn't contain newline-type characters - it is passed in a pipe to `gpg`,
         and so not checking could lead to spoofing attacks by passing arbitrary text after passphrase and newline.
@@ -396,15 +429,15 @@ class GPG:
 
     def sign_file(
         self,
-        fileobj_or_path,
-        keyid=None,
-        passphrase=None,
-        clearsign=True,
-        detach=False,
-        binary=False,
-        output=None,
-        extra_args=None,
-    ):
+        fileobj_or_path: BufferedReader | BytesIO | str,
+        keyid: str | None = None,
+        passphrase: str | None = None,
+        clearsign: bool = True,
+        detach: bool = False,
+        binary: bool = False,
+        output: str | None = None,
+        extra_args: None = None,
+    ) -> SignHandler:
         """
         Sign data in a file or file-like object.
 
@@ -468,7 +501,7 @@ class GPG:
         self._collect_output(p, result, writer, stdin)
         return result
 
-    def verify(self, data, **kwargs):
+    def verify(self, data: bytes, **kwargs) -> VerifyHandler:
         """
         Verify the signature on the contents of the string *data*. This method delegates most of the work to
         `verify_file()`.
@@ -490,7 +523,13 @@ class GPG:
         f.close()
         return result
 
-    def verify_file(self, fileobj_or_path, data_filename=None, close_file=True, extra_args=None):
+    def verify_file(
+        self,
+        fileobj_or_path: BytesIO | str,
+        data_filename: str | None = None,
+        close_file: bool = True,
+        extra_args: None = None,
+    ) -> VerifyHandler:
         """
         Verify a signature.
 
@@ -530,7 +569,7 @@ class GPG:
                 os.remove(fn)
         return result
 
-    def verify_data(self, sig_filename, data, extra_args=None):
+    def verify_data(self, sig_filename: str, data: bytes, extra_args: None = None) -> VerifyHandler:
         """
         Verify the signature in sig_filename against data in memory
 
@@ -555,7 +594,12 @@ class GPG:
     # KEY MANAGEMENT
     #
 
-    def import_keys(self, key_data, extra_args=None, passphrase=None):
+    def import_keys(
+        self,
+        key_data: str | bytes,
+        extra_args: None = None,
+        passphrase: None = None,
+    ) -> ImportResultHandler:
         """
         Import the key_data into our keyring.
 
@@ -577,7 +621,7 @@ class GPG:
         data.close()
         return result
 
-    def import_keys_file(self, key_path, **kwargs):
+    def import_keys_file(self, key_path: str, **kwargs) -> ImportResultHandler:
         """
         Import the key data in key_path into our keyring.
 
@@ -587,7 +631,7 @@ class GPG:
         with open(key_path, "rb") as f:
             return self.import_keys(f.read(), **kwargs)
 
-    def recv_keys(self, keyserver, *keyids, **kwargs):
+    def recv_keys(self, keyserver: str, *keyids, **kwargs) -> ImportResultHandler:
         """
         Import one or more keys from a keyserver.
 
@@ -637,7 +681,14 @@ class GPG:
         data.close()
         return result
 
-    def delete_keys(self, fingerprints, secret=False, passphrase=None, expect_passphrase=True, exclamation_mode=False):
+    def delete_keys(
+        self,
+        fingerprints: str,
+        secret: bool = False,
+        passphrase: str | None = None,
+        expect_passphrase: bool = True,
+        exclamation_mode: bool = False,
+    ) -> DeleteResultHandler:
         """
         Delete the indicated keys.
 
@@ -695,14 +746,14 @@ class GPG:
 
     def export_keys(
         self,
-        keyids,
-        secret=False,
-        armor=True,
-        minimal=False,
-        passphrase=None,
-        expect_passphrase=True,
-        output=None,
-    ):
+        keyids: str | list[str],
+        secret: bool = False,
+        armor: bool = True,
+        minimal: bool = False,
+        passphrase: str | None = None,
+        expect_passphrase: bool = True,
+        output: None = None,
+    ) -> str | bytes:
         """
         Export the indicated keys. A 'keyid' is anything `gpg` accepts.
 
@@ -766,7 +817,10 @@ class GPG:
             result = result.decode(self.encoding, self.decode_errors)
         return result
 
-    def _decode_result(self, result):
+    def _decode_result(
+        self,
+        result: ListKeysHandler | ScanKeysHandler,
+    ) -> ListKeysHandler | ScanKeysHandler:
         lines = result.data.decode(self.encoding, self.decode_errors).splitlines()
         valid_keywords = "pub uid sec fpr sub ssb sig grp".split()
         for line in lines:
@@ -783,13 +837,18 @@ class GPG:
                 getattr(result, keyword)(L)
         return result
 
-    def _get_list_output(self, p, kind):
+    def _get_list_output(self, p: Popen, kind: str) -> ListKeysHandler | ScanKeysHandler:
         # Get the response information
         result = self.result_map[kind](self)
         self._collect_output(p, result, stdin=p.stdin)
         return self._decode_result(result)
 
-    def list_keys(self, secret=False, keys=None, sigs=False):
+    def list_keys(
+        self,
+        secret: bool = False,
+        keys: str | list[str] | None = None,
+        sigs: bool = False,
+    ) -> ListKeysHandler:
         """
         List the keys currently in the keyring.
 
@@ -817,7 +876,7 @@ class GPG:
         p = self._open_subprocess(args)
         return self._get_list_output(p, "list")
 
-    def scan_keys(self, filename):
+    def scan_keys(self, filename: str) -> ScanKeysHandler:
         """
         List details of an ascii armored or binary key file without first importing it to the local keyring.
 
@@ -842,7 +901,7 @@ class GPG:
         p = self._open_subprocess(args)
         return self._get_list_output(p, "scan")
 
-    def scan_keys_mem(self, key_data):
+    def scan_keys_mem(self, key_data: str) -> ScanKeysHandler:
         """
         List details of an ascii armored or binary key without first importing it to the local keyring.
 
@@ -934,7 +993,7 @@ class GPG:
         self._decode_result(result)
         return result
 
-    def gen_key(self, input):
+    def gen_key(self, input: str) -> GenKeyHandler:
         """
         Generate a key; you might use `gen_key_input()` to create the input.
 
@@ -948,7 +1007,7 @@ class GPG:
         f.close()
         return result
 
-    def gen_key_input(self, **kwargs):
+    def gen_key_input(self, **kwargs) -> str:
         """
         Generate `--gen-key` input  (see `gpg` documentation in DETAILS).
 
@@ -1001,7 +1060,14 @@ class GPG:
         # %secring foo.sec
         # %commit
 
-    def add_subkey(self, master_key, master_passphrase=None, algorithm="rsa", usage="encrypt", expire="-"):
+    def add_subkey(
+        self,
+        master_key: str,
+        master_passphrase: str | None = None,
+        algorithm: str = "rsa",
+        usage: str = "encrypt",
+        expire: int = "-",
+    ) -> AddSubkeyHandler:
         """
         Add subkeys to a master key,
 
@@ -1041,16 +1107,16 @@ class GPG:
 
     def encrypt_file(
         self,
-        fileobj_or_path,
-        recipients,
-        sign=None,
-        always_trust=False,
-        passphrase=None,
-        armor=True,
-        output=None,
-        symmetric=False,
-        extra_args=None,
-    ):
+        fileobj_or_path: BytesIO | str,
+        recipients: str | list[str] | tuple[str, str] | None,
+        sign: str | None = None,
+        always_trust: bool = False,
+        passphrase: str | None = None,
+        armor: bool = True,
+        output: str | None = None,
+        symmetric: bool | str = False,
+        extra_args: list[str] | None = None,
+    ) -> CryptHandler:
         """
         Encrypt data in a file or file-like object.
 
@@ -1110,7 +1176,12 @@ class GPG:
         logger.debug("encrypt result[:100]: %r", result.data[:100])
         return result
 
-    def encrypt(self, data, recipients, **kwargs):
+    def encrypt(
+        self,
+        data: str | bytes,
+        recipients: str | list[str] | tuple[str, str] | None,
+        **kwargs,
+    ) -> CryptHandler:
         """
         Encrypt the message contained in the string *data* for *recipients*. This method delegates most of the work to
         `encrypt_file()`.
@@ -1140,7 +1211,7 @@ class GPG:
         data.close()
         return result
 
-    def decrypt(self, message, **kwargs):
+    def decrypt(self, message: str, **kwargs) -> CryptHandler:
         """
         Decrypt the data in *message*. This method delegates most of the work to
         `decrypt_file()`.
@@ -1163,7 +1234,14 @@ class GPG:
         data.close()
         return result
 
-    def decrypt_file(self, fileobj_or_path, always_trust=False, passphrase=None, output=None, extra_args=None):
+    def decrypt_file(
+        self,
+        fileobj_or_path: str | bytes | BufferedReader | TextIOWrapper | BytesIO,
+        always_trust: bool = False,
+        passphrase: str | None = None,
+        output: str | None = None,
+        extra_args: None = None,
+    ) -> CryptHandler:
         """
         Decrypt data in a file or file-like object.
 
@@ -1194,7 +1272,7 @@ class GPG:
         # logger.debug('decrypt result[:100]: %r', result.data[:100])
         return result
 
-    def get_recipients(self, message, **kwargs):
+    def get_recipients(self, message: str, **kwargs) -> list[str]:
         """Get the list of recipients for an encrypted message. This method delegates most of the work to
         `get_recipients_file()`.
 
@@ -1210,7 +1288,7 @@ class GPG:
         data.close()
         return result
 
-    def get_recipients_file(self, fileobj_or_path, extra_args=None):
+    def get_recipients_file(self, fileobj_or_path: BytesIO | str, extra_args: None = None) -> list[str]:
         """
         Get the list of recipients for an encrypted message in a file or file-like object.
 
@@ -1229,7 +1307,7 @@ class GPG:
             ids.append(m.group(1))
         return ids
 
-    def trust_keys(self, fingerprints, trustlevel):
+    def trust_keys(self, fingerprints: str | list[str], trustlevel: str) -> TrustResultHandler:
         """
         Set the trust level for one or more keys.
 

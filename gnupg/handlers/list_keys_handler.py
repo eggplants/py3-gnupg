@@ -1,5 +1,12 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from .helper import _set_fields
 from .search_keys_handler import SearchKeysHandler
+
+if TYPE_CHECKING:
+    from gnupg.gnupg import GPG
 
 
 class ListKeysHandler(SearchKeysHandler):
@@ -26,12 +33,12 @@ class ListKeysHandler(SearchKeysHandler):
         " cap issuer flag token hash curve compliance updated origin keygrip"
     ).split()
 
-    def __init__(self, gpg) -> None:
+    def __init__(self, gpg: GPG) -> None:
         super().__init__(gpg)
         self.in_subkey = False
         self.key_map = {}
 
-    def key(self, args) -> None:
+    def key(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """
@@ -45,7 +52,7 @@ class ListKeysHandler(SearchKeysHandler):
 
     pub = sec = key
 
-    def fpr(self, args) -> None:
+    def fpr(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """
@@ -61,7 +68,7 @@ class ListKeysHandler(SearchKeysHandler):
             self.curkey["subkeys"][-1][2] = fp
             self.key_map[fp] = self.curkey
 
-    def grp(self, args) -> None:
+    def grp(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """
@@ -71,13 +78,20 @@ class ListKeysHandler(SearchKeysHandler):
         else:
             self.curkey["subkeys"][-1][3] = grp
 
-    def _collect_subkey_info(self, curkey, args) -> None:
+    def _collect_subkey_info(
+        self,
+        curkey: dict[
+            str,
+            str | list[str] | list[list[str | None]] | dict[str, dict[str, str]] | list[tuple[str, str, str]],
+        ],
+        args: list[str],
+    ) -> None:
         info_map = curkey.setdefault("subkey_info", {})
         info = {}
         _set_fields(info, self.FIELDS, args)
         info_map[args[4]] = info
 
-    def sub(self, args) -> None:
+    def sub(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """
@@ -89,7 +103,7 @@ class ListKeysHandler(SearchKeysHandler):
         self._collect_subkey_info(self.curkey, args)
         self.in_subkey = True
 
-    def ssb(self, args) -> None:
+    def ssb(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """
@@ -98,7 +112,7 @@ class ListKeysHandler(SearchKeysHandler):
         self._collect_subkey_info(self.curkey, args)
         self.in_subkey = True
 
-    def sig(self, args) -> None:
+    def sig(self, args: list[str]) -> None:
         """
         Internal method used to update the instance from a `gpg` status message.
         """

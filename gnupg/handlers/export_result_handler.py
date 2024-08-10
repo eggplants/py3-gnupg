@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .gen_key_handler import GenKeyHandler
 
 

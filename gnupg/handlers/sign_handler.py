@@ -1,7 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from gnupg.helper import _get_logger
 
 from .status_handler import StatusHandler
 from .text_handler import TextHandler
+
+if TYPE_CHECKING:
+    from gnupg.gnupg import GPG
 
 logger = _get_logger(__name__)
 
@@ -13,7 +20,7 @@ class SignHandler(StatusHandler, TextHandler):
 
     returncode = None
 
-    def __init__(self, gpg) -> None:
+    def __init__(self, gpg: GPG) -> None:
         StatusHandler.__init__(self, gpg)
         self.type = None
         self.hash_algo = None
@@ -23,7 +30,7 @@ class SignHandler(StatusHandler, TextHandler):
         self.key_id = None
         self.username = None
 
-    def __nonzero__(self):
+    def __nonzero__(self) -> bool:
         return self.fingerprint is not None
 
     __bool__ = __nonzero__
