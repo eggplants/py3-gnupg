@@ -42,7 +42,7 @@ repos:
   rev: v1.11.1
   hooks:
   - id: mypy
-    files: ^python_gnupg/
+    files: ^gnupg/
     args: [--strict]
 - repo: https://github.com/igorshubovych/markdownlint-cli
   rev: v0.41.0
