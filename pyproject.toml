@@ -81,10 +81,15 @@ lint.ignore = [
 
 lint.per-file-ignores."tests/*test_*.py" = [
   "INP001", # File tests/test_*.py is part of an implicit namespace package. Add an __init__.py.
+  "PT027",  # Use `pytest.raises` instead of unittest-style `assertRaises`
   "S101",   # Use of assert detected
+  "S106",   # Possible hardcoded password assigned to argument: "passphrase"
 ]
 
 lint.mccabe.max-complexity = 26
+
+lint.pylint.max-branches = 30
+lint.pylint.max-statements = 100
 
 [tool.mypy]
 pretty = true
