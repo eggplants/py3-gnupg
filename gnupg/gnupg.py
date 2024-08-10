@@ -31,10 +31,7 @@ PUBLIC_KEY_RE = re.compile(r"gpg: public key is (\w+)")
 
 STARTUPINFO = None
 if os.name == "nt":  # pragma: no cover
-    try:
-        from subprocess import STARTF_USESHOWWINDOW, STARTUPINFO, SW_HIDE
-    except ImportError:
-        STARTUPINFO = None
+    from subprocess import STARTF_USESHOWWINDOW, STARTUPINFO, SW_HIDE
 
 logger = _get_logger(__name__)
 
