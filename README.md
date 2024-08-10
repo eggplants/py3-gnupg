@@ -3,16 +3,14 @@
 > [!NOTE]  
 > **THIS PROJECT IS A FORK OF [python-gnupg](https://github.com/vsajip/python-gnupg), BUT FOR Python3 ONLY.**
 
-![GitHub test status](
-  <https://img.shields.io/github/actions/workflow/status/eggplants/py3-gnupg/python-package.yml>
-) [![GitHub coverage status](
-  <https://img.shields.io/codecov/c/github/eggplants/py3-gnupg>
+[![Maintainability](
+  <https://api.codeclimate.com/v1/badges/210899aaefb3834644a7/maintainability>
 )](
-  <https://app.codecov.io/gh/eggplants/py3-gnupg>
-) [![PyPI package](
-  <https://img.shields.io/pypi/v/py3-gnupg>
+  <https://codeclimate.com/github/eggplants/py3-gnupg/maintainability>
+) [![Test Coverage](
+  <https://api.codeclimate.com/v1/badges/210899aaefb3834644a7/test_coverage>
 )](
-  <https://pypi.org/project/py3-gnupg/>
+  <https://codeclimate.com/github/eggplants/py3-gnupg/test_coverage>
 )
 
 ## Installation
