@@ -1,0 +1,1743 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.5.4">
+    
+    
+      
+        <title>Changelog - py3-gnupg</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.80dcb947.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="lightgreen">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#change-log" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="py3-gnupg" class="md-header__button md-logo" aria-label="py3-gnupg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            py3-gnupg
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Changelog
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/eggplants/py3-gnupg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    py3-gnupg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="py3-gnupg" class="md-nav__button md-logo" aria-label="py3-gnupg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    py3-gnupg
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/eggplants/py3-gnupg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    py3-gnupg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Changelog
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Changelog
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#053-future" class="md-nav__link">
+    0.5.3 (future)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#052" class="md-nav__link">
+    0.5.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#051" class="md-nav__link">
+    0.5.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#050" class="md-nav__link">
+    0.5.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#049" class="md-nav__link">
+    0.4.9
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#048" class="md-nav__link">
+    0.4.8
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#047" class="md-nav__link">
+    0.4.7
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#046" class="md-nav__link">
+    0.4.6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#045" class="md-nav__link">
+    0.4.5
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#044" class="md-nav__link">
+    0.4.4
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#043" class="md-nav__link">
+    0.4.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#042" class="md-nav__link">
+    0.4.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#041" class="md-nav__link">
+    0.4.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#040" class="md-nav__link">
+    0.4.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#039" class="md-nav__link">
+    0.3.9
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#038" class="md-nav__link">
+    0.3.8
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#037" class="md-nav__link">
+    0.3.7
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#036" class="md-nav__link">
+    0.3.6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#035" class="md-nav__link">
+    0.3.5
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#034" class="md-nav__link">
+    0.3.4
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#033" class="md-nav__link">
+    0.3.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#032" class="md-nav__link">
+    0.3.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#031" class="md-nav__link">
+    0.3.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#030" class="md-nav__link">
+    0.3.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#029" class="md-nav__link">
+    0.2.9
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#028" class="md-nav__link">
+    0.2.8
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#027" class="md-nav__link">
+    0.2.7
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#026" class="md-nav__link">
+    0.2.6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#025" class="md-nav__link">
+    0.2.5
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#024" class="md-nav__link">
+    0.2.4
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#023" class="md-nav__link">
+    0.2.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#022" class="md-nav__link">
+    0.2.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#021" class="md-nav__link">
+    0.2.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#020" class="md-nav__link">
+    0.2.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#010" class="md-nav__link">
+    0.1.0
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Gnupg
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Gnupg" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Gnupg
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/gnupg/" class="md-nav__link">
+        Gnupg
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/helper/" class="md-nav__link">
+        Helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_4" type="checkbox" id="__nav_3_1_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_4">
+          Handlers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Handlers" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          Handlers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/add_subkey_handler/" class="md-nav__link">
+        Add Subkey Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/auto_locate_key_handler/" class="md-nav__link">
+        Auto Locate Key Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/crypt_handler/" class="md-nav__link">
+        Crypt Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/delete_result_handler/" class="md-nav__link">
+        Delete Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/export_result_handler/" class="md-nav__link">
+        Export Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/gen_key_handler/" class="md-nav__link">
+        Gen Key Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/helper/" class="md-nav__link">
+        Helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/import_result_handler/" class="md-nav__link">
+        Import Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/list_keys_handler/" class="md-nav__link">
+        List Keys Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/scan_keys_handler/" class="md-nav__link">
+        Scan Keys Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/search_keys_handler/" class="md-nav__link">
+        Search Keys Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/send_result_handler/" class="md-nav__link">
+        Send Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/sign_handler/" class="md-nav__link">
+        Sign Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/status_handler/" class="md-nav__link">
+        Status Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/text_handler/" class="md-nav__link">
+        Text Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/trust_result_handler/" class="md-nav__link">
+        Trust Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/gnupg/handlers/verify_handler/" class="md-nav__link">
+        Verify Handler
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#053-future" class="md-nav__link">
+    0.5.3 (future)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#052" class="md-nav__link">
+    0.5.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#051" class="md-nav__link">
+    0.5.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#050" class="md-nav__link">
+    0.5.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#049" class="md-nav__link">
+    0.4.9
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#048" class="md-nav__link">
+    0.4.8
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#047" class="md-nav__link">
+    0.4.7
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#046" class="md-nav__link">
+    0.4.6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#045" class="md-nav__link">
+    0.4.5
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#044" class="md-nav__link">
+    0.4.4
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#043" class="md-nav__link">
+    0.4.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#042" class="md-nav__link">
+    0.4.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#041" class="md-nav__link">
+    0.4.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#040" class="md-nav__link">
+    0.4.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#039" class="md-nav__link">
+    0.3.9
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#038" class="md-nav__link">
+    0.3.8
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#037" class="md-nav__link">
+    0.3.7
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#036" class="md-nav__link">
+    0.3.6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#035" class="md-nav__link">
+    0.3.5
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#034" class="md-nav__link">
+    0.3.4
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#033" class="md-nav__link">
+    0.3.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#032" class="md-nav__link">
+    0.3.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#031" class="md-nav__link">
+    0.3.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#030" class="md-nav__link">
+    0.3.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#029" class="md-nav__link">
+    0.2.9
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#028" class="md-nav__link">
+    0.2.8
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#027" class="md-nav__link">
+    0.2.7
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#026" class="md-nav__link">
+    0.2.6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#025" class="md-nav__link">
+    0.2.5
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#024" class="md-nav__link">
+    0.2.4
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#023" class="md-nav__link">
+    0.2.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#022" class="md-nav__link">
+    0.2.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#021" class="md-nav__link">
+    0.2.1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#020" class="md-nav__link">
+    0.2.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#010" class="md-nav__link">
+    0.1.0
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/eggplants/py3-gnupg/edit/main/CHANGELOG.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="change-log">Change log</h1>
+<blockquote>
+<p>[!NOTE]
+GCnn refers to an issue nn on Google Code.</p>
+</blockquote>
+<h2 id="053-future">0.5.3 (future)</h2>
+<p>Released: Not yet</p>
+<ul>
+<li>Fix #117: Add WKD (Web Key Directory) support for auto-locating
+    keys. Thanks to Myzel394 for the patch.</li>
+<li>Fix #237: Ensure local variable is initialized even when an
+    exception occurs.</li>
+<li>Fix #239: Remove logging of decryption result.</li>
+</ul>
+<h2 id="052">0.5.2</h2>
+<p>Released: 2023-12-12</p>
+<ul>
+<li>Fix #228: Clarify documentation for encryption/decryption.</li>
+<li>Make I/O buffer size configurable via <code>buffer_size</code> attribute on a
+    <code>GPG</code> instance.</li>
+</ul>
+<h2 id="051">0.5.1</h2>
+<p>Released: 2023-07-22</p>
+<ul>
+<li>Added <code>TRUST_EXPIRED</code> to <code>trust_keys</code>. Thanks to Leif Liddy for the
+    patch.</li>
+<li>Fix #206: Remove deprecated <code>--always-trust</code> in favour of
+    <code>--trust-model always</code></li>
+<li>Fix #208: Add <code>status_detail</code> attribute to result objects which is
+    populated when the status is <code>'invalid recipient'</code>
+    (encryption/decryption) or <code>'invalid signer'</code> (signing). This
+    attribute will be set when the result object's <code>status</code> attribute is
+    set to <code>invalid recipient</code> and will contain more information about
+    the failure in the form of <code>reason:ident</code> where <code>reason</code> is a text
+    description of the reason, and <code>ident</code> identifies the recipient key.</li>
+<li>Add <code>scan_keys_mem()</code> function to scan keys in a string. Thanks to
+    Sky Moore for the patch.</li>
+<li>Fix #214: Handle multiple signatures when one of them is invalid or
+    unverified.</li>
+<li>A <code>problems</code> attribute was added which holds problems reported by
+    <code>gpg</code> during verification. This is a list of dictionaries, one for
+    each reported problem. Each dictionary will have <code>status</code> and
+    <code>keyid</code> keys indicating the problem and the corresponding key; other
+    information in the dictionaries will be error specific.</li>
+<li>Fix #217: Use machine-readable interface to query the <code>gpg</code> version.
+    Thanks to Justus Winter for the patch.</li>
+<li>Added the ability to export keys to a file. Thanks to Leif Liddy for
+    the patch.</li>
+</ul>
+<h2 id="050">0.5.0</h2>
+<p>Released: 2022-08-23</p>
+<ul>
+<li>Fixed #181: Added the ability to pass file paths to encrypt_file,
+    decrypt_file, sign_file, verify_file, get_recipients_file and added
+    import_keys_file.</li>
+<li>Fixed #183: Handle FAILURE and UNEXPECTED conditions correctly.
+    Thanks to sebbASF for the patch.</li>
+<li>Fixed #185: Handle VALIDSIG arguments more robustly.</li>
+<li>Fixed #188: Remove handling of DECRYPTION_FAILED from Verify code,
+    as not required there. Thanks to sebbASF for the patch.</li>
+<li>Fixed #190: Handle KEY_CREATED more robustly.</li>
+<li>Fixed #191: Handle NODATA messages during verification.</li>
+<li>Fixed #196: Don't log chunk data by default, as it could contain
+    sensitive information (during decryption, for example).</li>
+<li>Added the ability to pass an environment to the gpg executable.
+    Thanks to Edvard Rejthar for the patch.</li>
+</ul>
+<h2 id="049">0.4.9</h2>
+<p>Released: 2022-05-20</p>
+<ul>
+<li>Fixed #161: Added a status attribute to the returned object from
+    gen_key() which is set to 'ok' if a key was successfully created, or
+    'key not created' if that was reported by gpg, or None in any other
+    case.</li>
+<li>Fixed #164: Provided the ability to add subkeys. Thanks to Daniel
+    Kilimnik for the feature request and patch.</li>
+<li>Fixed #166: Added keygrip values to the information collected when
+    keys are listed. Thanks to Daniel Kilimnik for the feature request
+    and patch.</li>
+<li>Fixed #173: Added extra_args to send_keys(), recv_keys() and
+    search_keys() to allow passing options relating to key servers.</li>
+</ul>
+<h2 id="048">0.4.8</h2>
+<p>Released: 2021-11-24</p>
+<ul>
+<li>Fixed #147: Return gpg's return code in all result instances.</li>
+<li>Fixed #152: Add check for invalid file objects.</li>
+<li>Fixed #157: Provide more useful status message when a secret key is
+    absent.</li>
+<li>Fixed #158: Added a get_recipients() API to find the recipients of
+    an encrypted message without decrypting it.</li>
+</ul>
+<h2 id="047">0.4.7</h2>
+<p>Released: 2021-03-11</p>
+<ul>
+<li>Fixed #129, #141: Added support for no passphrase during key
+    generation.</li>
+<li>Fixed #143: Improved permission-denied test. Thanks to Elliot
+    Cameron for the patch.</li>
+<li>Fixed #144: Updated logging to only show partial results.</li>
+<li>Fixed #146: Allowed a passphrase to be passed to import_keys().
+    Thanks to Chris de Graaf for the patch.</li>
+</ul>
+<h2 id="046">0.4.6</h2>
+<p>Released: 2020-04-17</p>
+<ul>
+<li>Fixed #122: Updated documentation about gnupghome needing to be an
+    existing directory.</li>
+<li>Fixed #123: Handled error conditions from gpg when calling
+    trust_keys().</li>
+<li>Fixed #124: Avoided an exception being raised when
+    ImportResult.summary() was called after a failed recv_keys().</li>
+<li>Fixed #128: Added ECC support by changing key generation parameters.
+    (The Key-Length value isn't added if a curve is specified.)</li>
+<li>Fixed #130: Provided a mechanism to provide more complete error
+    messages.</li>
+</ul>
+<p>Support for Python versions 3.5 and under is discontinued, except for
+Python 2.7.</p>
+<h2 id="045">0.4.5</h2>
+<p>Released: 2019-08-12</p>
+<ul>
+<li>Fixed #107: Improved documentation.</li>
+<li>Fixed #112: Raised a ValueError if a gnupghome is specified which is
+    not an existing directory.</li>
+<li>Fixed #113: Corrected stale link in the documentation.</li>
+<li>Fixed #116: Updated documentation to clarify when spurious
+    key-expired/ signature-expired messages might be seen.</li>
+<li>Fixed #119: Added --yes to avoid pinentry when deleting secret keys
+    with GnuPG &gt;= 2.1.</li>
+<li>A warning is logged if gpg returns a non-zero return code.</li>
+<li>Added <code>extra_args</code> to <code>import_keys</code>.</li>
+<li>Added support for CI using AppVeyor.</li>
+</ul>
+<h2 id="044">0.4.4</h2>
+<p>Released: 2019-01-24</p>
+<ul>
+<li>
+<p>Fixed #108: Changed how any return value from the <code>on_data</code> callable
+    is processed. In earlier versions, the return value was ignored. In
+    this version, if the return value is <code>False</code>, the data received from
+    <code>gpg</code> is not buffered. Otherwise (if the value is <code>None</code> or <code>True</code>,
+    for example), the data is buffered as normal. This functionality can
+    be used to do your own buffering, or to prevent buffering
+    altogether.</p>
+<p>The <code>on_data</code> callable is also called once with an empty byte-string
+to signal the end of data from <code>gpg</code>.</p>
+</li>
+<li>
+<p>Fixed #97: Added an additional attribute
+    <code>check_fingerprint_collisions</code> to <code>GPG</code> instances, which defaults to
+    <code>False</code>. It seems that <code>gpg</code> is happy to have duplicate keys and
+    fingerprints in a keyring, so we can't be too strict. A user can set
+    this attribute of an instance to <code>True</code> to trigger a check for
+    collisions.</p>
+</li>
+<li>
+<p>Fixed #111: With GnuPG 2.2.7 or later, provide the fingerprint of a
+    signing key for a failed signature verification, if available.</p>
+</li>
+<li>
+<p>Fixed #21: For verification where multiple signatures are involved,
+    a mapping of signature_ids to fingerprint, keyid, username, creation
+    date, creation timestamp and expiry timestamp is provided.</p>
+</li>
+<li>
+<p>Added a check to disallow certain control characters ('r', 'n', NUL)
+    in passphrases.</p>
+</li>
+</ul>
+<h2 id="043">0.4.3</h2>
+<p>Released: 2018-06-13</p>
+<ul>
+<li>Added --no-verbose to the gpg command line, in case verbose is
+    specified in gpg.conf - we don't need verbose output.</li>
+</ul>
+<h2 id="042">0.4.2</h2>
+<p>Released: 2018-03-28</p>
+<ul>
+<li>Fixed #81: Subkey information is now collected and returned in a
+    <code>subkey_info</code> dictionary keyed by the subkey's ID.</li>
+<li>Fixed #84: GPG2 version is now correctly detected on OS X.</li>
+<li>Fixed #94: Added <code>expect_passphrase</code> password for use on GnuPG &gt;=
+    2.1 when passing passphrase to <code>gpg</code> via pinentry.</li>
+<li>Fixed #95: Provided a <code>trust_keys</code> method to allow setting the trust
+    level for keys. Thanks to William Foster for a suggested
+    implementation.</li>
+<li>Made the exception message when the gpg executable is not found
+    contain the path of the executable that was tried. Thanks to Kostis
+    Anagnostopoulos for the suggestion.</li>
+<li>Fixed #100: Made the error message less categorical in the case of a
+    failure with an unspecified reason, adding some information from gpg
+    error codes when available.</li>
+</ul>
+<h2 id="041">0.4.1</h2>
+<p>Released: 2017-07-06</p>
+<ul>
+<li>Updated message handling logic to no longer raise exceptions when a
+    message isn't recognised. Thanks to Daniel Kahn Gillmor for the
+    patch.</li>
+<li>Always use always use <code>--fixed-list-mode</code>, <code>--batch</code> and
+    <code>--with-colons</code>. Thanks to Daniel Kahn Gillmor for the patch.</li>
+<li>Improved <code>scan_keys()</code> handling on GnuPG &gt;= 2.1. Thanks to Daniel
+    Kahn Gillmor for the patch.</li>
+<li>Improved test behaviour with GnuPG &gt;= 2.1. Failures when deleting
+    test directory trees are now ignored. Thanks to Daniel Kahn Gillmor
+    for the patch.</li>
+<li>Added <code>close_file</code> keyword argument to verify_file to allow the file
+    closing to be made optional. Current behaviour is maintained -
+    <code>close_file=False</code> can be passed to skip closing the file being
+    verified.</li>
+<li>Added the <code>extra_args</code> keyword parameter to allow custom arguments
+    to be passed to the <code>gpg</code> executable.</li>
+<li>Instances of the <code>GPG</code> class now have an additional <code>on_data</code>
+    attribute, which defaults to <code>None</code>. It can be set to a callable
+    which will be called with a single argument - a binary chunk of data
+    received from the <code>gpg</code> executable. The callable can do whatever it
+    likes with the chunks passed to it
+    - e.g. write them to a separate stream. The callable should not
+    raise any exceptions (unless it wants the current operation to
+    fail).</li>
+</ul>
+<h2 id="040">0.4.0</h2>
+<p>Released: 2017-01-29</p>
+<ul>
+<li>Added support for <code>KEY_CONSIDERED</code> in more places - encryption /
+    decryption, signing, key generation and key import.</li>
+<li>Partial fix for #32 (GPG 2.1 compatibility). Unfortunately, better
+    support cannot be provided at this point, unless there are certain
+    changes (relating to pinentry popups) in how GPG 2.1 works.</li>
+<li>Fixed #60: An IndexError was being thrown by <code>scan_keys()</code>.</li>
+<li>Ensured that utf-8 encoding is used when the <code>--with-column</code> mode is
+    used. Thanks to Yann Leboulanger for the patch.</li>
+<li><code>list_keys()</code> now uses <code>--fixed-list-mode</code>. Thanks to Werner Koch
+    for the pointer.</li>
+</ul>
+<h2 id="039">0.3.9</h2>
+<p>Released: 2016-09-10</p>
+<ul>
+<li>Fixed #38: You can now request information about signatures against
+    keys. Thanks to SunDwarf for the suggestion and patch, which was
+    used as a basis for this change.</li>
+<li>Fixed #49: When exporting keys, no attempt is made to decode the
+    output when armor=False is specified.</li>
+<li>Fixed #53: A <code>FAILURE</code> message caused by passing an incorrect
+    passphrase is handled.</li>
+<li>Handled <code>EXPORTED</code> and <code>EXPORT_RES</code> messages while exporting keys.
+    Thanks to Marcel Pörner for the patch.</li>
+<li>Fixed #54: Improved error message shown when gpg is not available.</li>
+<li>Fixed #55: Added support for <code>KEY_CONSIDERED</code> while verifying.</li>
+<li>Avoided encoding problems with filenames under Windows. Thanks to
+    Kévin Bernard-Allies for the patch.</li>
+<li>Fixed #57: Used a better mechanism for comparing keys.</li>
+</ul>
+<h2 id="038">0.3.8</h2>
+<p>Released: 2015-09-24</p>
+<ul>
+<li>Fixed #22: handled <code>PROGRESS</code> messages during verification and
+    signing.</li>
+<li>Fixed #26: handled <code>PINENTRY_LAUNCHED</code> messages during verification,
+    decryption and key generation.</li>
+<li>Fixed #28: Allowed a default Name-Email to be computed even when
+    neither of <code>LOGNAME</code> and <code>USERNAME</code> are in the environment.</li>
+<li>Fixed #29: Included test files missing from the tarball in previous
+    versions.</li>
+<li>Fixed #39: On Python 3.x, passing a text instead of a binary stream
+    caused file decryption to hang due to a <code>UnicodeDecodeError</code>. This
+    has now been correctly handled: The decryption fails with a "no
+    data" status.</li>
+<li>Fixed #41: Handled Unicode filenames correctly by encoding them on
+    2.x using the file system encoding.</li>
+<li>Fixed #43: handled <code>PINENTRY_LAUNCHED</code> messages during key export.
+    Thanks to Ian Denhardt for looking into this.</li>
+<li>Hide the console window which appears on Windows when gpg is
+    spawned. Thanks to Kévin Bernard-Allies for the patch.</li>
+<li>Subkey fingerprints are now captured.</li>
+<li>The returned value from the <code>list_keys</code> method now has a new
+    attribute, <code>key_map</code>, which is a dictionary mapping key and subkey
+    fingerprints to the corresponding key's dictionary. With this
+    change, you don't need to iterate over the (potentially large)
+    returned list to search for a key with a given fingerprint - the
+    <code>key_map</code> dict will take you straight to the key info, whether the
+    fingerprint you have is for a key or a subkey. Thanks to Nick Daly
+    for the initial suggestion.</li>
+</ul>
+<h2 id="037">0.3.7</h2>
+<p>Released: 2014-12-07</p>
+<p>Signed with PGP key: Vinay Sajip (CODE SIGNING KEY)
+\&lt;<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#118;&#105;&#110;&#97;&#121;&#95;&#115;&#97;&#106;&#105;&#112;&#64;&#121;&#97;&#104;&#111;&#111;&#46;&#99;&#111;&#46;&#117;&#107;">&#118;&#105;&#110;&#97;&#121;&#95;&#115;&#97;&#106;&#105;&#112;&#64;&#121;&#97;&#104;&#111;&#111;&#46;&#99;&#111;&#46;&#117;&#107;</a>&gt;</p>
+<p>Key Fingerprint : CA74 9061 914E AC13 8E66 EADB 9147 B477 339A 9B86</p>
+<ul>
+<li>Added an <code>output</code> keyword parameter to the <code>sign</code> and <code>sign_file</code>
+    methods, to allow writing the signature to a file. Thanks to Jannis
+    Leidel for the patch.</li>
+<li>Allowed specifying <code>True</code> for the <code>sign</code> keyword parameter, which
+    allows use of the default key for signing and avoids having to
+    specify a key id when it's desired to use the default. Thanks to
+    Fabian Beutel for the patch.</li>
+<li>Used a uniform approach with subprocess on Windows and POSIX:
+    shell=True is not used on either.</li>
+<li>When signing/verifying, the status is updated to reflect any expired
+    or revoked keys or signatures.</li>
+<li>Handled 'NOTATION_NAME' and 'NOTATION_DATA' during verification.</li>
+<li>Fixed #1, #16, #18, #20: Quoting approach changed, since now
+    shell=False.</li>
+<li>Fixed #14: Handled 'NEED_PASSPHRASE_PIN' message.</li>
+<li>Fixed #8: Added a scan_keys method to allow scanning of keys without
+    the need to import into a keyring. Thanks to Venzen Khaosan for the
+    suggestion.</li>
+<li>Fixed #5: Added '0x' prefix when searching for keys. Thanks to Aaron
+    Toponce for the report.</li>
+<li>Fixed #4: Handled 'PROGRESS' message during encryption. Thanks to
+    Daniel Mills for the report.</li>
+<li>Fixed #3: Changed default encoding to Latin-1.</li>
+<li>Fixed #2: Raised ValueError if no recipients were specified for an
+    asymmetric encryption request.</li>
+<li>Handled 'UNEXPECTED' message during verification. Thanks to David
+    Andersen for the patch.</li>
+<li>Replaced old range(len(X)) idiom with enumerate().</li>
+<li>Refactored <code>ListKeys</code> / <code>SearchKeys</code> classes to maximise use of
+    common functions.</li>
+<li>Fixed GC94: Added <code>export-minimal</code> and <code>armor</code> options when
+    exporting keys. This addition was inadvertently left out of 0.3.6.</li>
+</ul>
+<h2 id="036">0.3.6</h2>
+<p>Released: 2014-02-05</p>
+<ul>
+<li>Fixed GC82: Enabled fast random tests on gpg as well as gpg2.</li>
+<li>Fixed GC85: Avoided deleting temporary file to preserve its
+    permissions.</li>
+<li>Fixed GC87: Avoided writing passphrase to log.</li>
+<li>Fixed GC95: Added <code>verify_data()</code> method to allow verification of
+    signatures in memory.</li>
+<li>Fixed GC96: Regularised end-of-line characters.</li>
+<li>Fixed GC98: Rectified problems with earlier fix for shell injection.</li>
+</ul>
+<h2 id="035">0.3.5</h2>
+<p>Released: 2013-08-30</p>
+<ul>
+<li>Added improved shell quoting to guard against shell injection.</li>
+<li>Fixed GC76: Added <code>search_keys()</code> and <code>send_keys()</code> methods.</li>
+<li>Fixed GC77: Allowed specifying a symmetric cipher algorithm.</li>
+<li>Fixed GC78: Fell back to utf-8 encoding when no other could be
+    determined.</li>
+<li>Fixed GC79: Default key length is now 2048 bits.</li>
+<li>Fixed GC80: Removed the Name-Comment default in key generation.</li>
+</ul>
+<h2 id="034">0.3.4</h2>
+<p>Released: 2013-06-05</p>
+<ul>
+<li>Fixed GC65: Fixed encoding exception when getting version.</li>
+<li>Fixed GC66: Now accepts sets and frozensets where appropriate.</li>
+<li>Fixed GC67: Hash algorithm now captured in sign result.</li>
+<li>Fixed GC68: Added support for <code>--secret-keyring</code>.</li>
+<li>Fixed GC70: Added support for multiple keyrings.</li>
+</ul>
+<h2 id="033">0.3.3</h2>
+<p>Released: 2013-03-11</p>
+<ul>
+<li>Fixed GC57: Handled control characters in <code>list_keys()</code>.</li>
+<li>Fixed GC61: Enabled fast random for testing.</li>
+<li>Fixed GC62: Handled <code>KEYEXPIRED</code> status.</li>
+<li>Fixed GC63: Handled <code>NO_SGNR</code> status.</li>
+</ul>
+<h2 id="032">0.3.2</h2>
+<p>Released: 2013-01-17</p>
+<ul>
+<li>Fixed GC56: Disallowed blank values in key generation.</li>
+<li>Fixed GC57: Handled colons and other characters in <code>list_keys()</code>.</li>
+<li>Fixed GC59/GC60: Handled <code>INV_SGNR</code> status during verification and
+    removed calls requiring interactive password input from doctests.</li>
+</ul>
+<h2 id="031">0.3.1</h2>
+<p>Released: 2012-09-01</p>
+<ul>
+<li>Fixed GC45: Allowed additional arguments to gpg executable.</li>
+<li>Fixed GC50: Used latin-1 encoding in tests when it's known to be
+    required.</li>
+<li>Fixed GC51: Test now returns non-zero exit status on test failure.</li>
+<li>Fixed GC53: Now handles <code>INV_SGNR</code> and <code>KEY_NOT_CREATED</code> statuses.</li>
+<li>Fixed GC55: Verification and decryption now return trust level of
+    signer in integer and text form.</li>
+</ul>
+<h2 id="030">0.3.0</h2>
+<p>Released: 2012-05-12</p>
+<ul>
+<li>Fixed GC49: Reinstated Yann Leboulanger's change to support subkeys
+    (accidentally left out in 0.2.7).</li>
+</ul>
+<h2 id="029">0.2.9</h2>
+<p>Released: 2012-03-29</p>
+<ul>
+<li>Fixed GC36: Now handles <code>CARDCTRL</code> and <code>POLICY_URL</code> messages.</li>
+<li>Fixed GC40: Now handles <code>DECRYPTION_INFO</code>, <code>DECRYPTION_FAILED</code> and
+    <code>DECRYPTION_OKAY</code> messages.</li>
+<li>The <code>random_binary_data file</code> is no longer shipped, but constructed
+    by the test suite if needed.</li>
+</ul>
+<h2 id="028">0.2.8</h2>
+<p>Released: 2011-09-02</p>
+<ul>
+<li>Fixed GC29: Now handles <code>IMPORT_RES</code> while verifying.</li>
+<li>Fixed GC30: Fixed an encoding problem.</li>
+<li>Fixed GC33: Quoted arguments for added safety.</li>
+</ul>
+<h2 id="027">0.2.7</h2>
+<p>Released: 2011-04-10</p>
+<ul>
+<li>Fixed GC24: License is clarified as BSD.</li>
+<li>Fixed GC25: Incorporated Daniel Folkinshteyn's changes.</li>
+<li>Fixed GC26: Incorporated Yann Leboulanger's subkey change.</li>
+<li>Fixed GC27: Incorporated hysterix's support for symmetric
+    encryption.</li>
+<li>Did some internal cleanups of Unicode handling.</li>
+</ul>
+<h2 id="026">0.2.6</h2>
+<p>Released: 2011-01-25</p>
+<ul>
+<li>Fixed GC14: Should be able to accept passphrases from GPG-Agent.</li>
+<li>Fixed GC19: Should be able to create a detached signature.</li>
+<li>Fixed GC21/GC23: Better handling of less common responses from GPG.</li>
+</ul>
+<h2 id="025">0.2.5</h2>
+<p>Released: 2010-10-13</p>
+<ul>
+<li>Fixed GC11/GC16: Detached signatures can now be created.</li>
+<li>Fixed GC3: Detached signatures can be verified.</li>
+<li>Fixed GC12: Better support for RSA and IDEA.</li>
+<li>Fixed GC15/GC17: Better support for non-ASCII input.</li>
+</ul>
+<h2 id="024">0.2.4</h2>
+<p>Released: 2010-03-01</p>
+<ul>
+<li>Fixed GC9: Now allows encryption without armor and the ability to
+    encrypt and decrypt directly to/from files.</li>
+</ul>
+<h2 id="023">0.2.3</h2>
+<p>Released: 2010-01-07</p>
+<ul>
+<li>Fixed GC7: Made sending data to process threaded and added a test
+    case. With a test data file used by the test case, the archive size
+    has gone up to 5MB (the size of the test file).</li>
+</ul>
+<h2 id="022">0.2.2</h2>
+<p>Released: 2009-10-06</p>
+<ul>
+<li>Fixed GC5/GC6: Added <code>--batch</code> when specifying <code>--passphrase-fd</code> and
+    changed the name of the distribution file to add the <code>python-</code>
+    prefix.</li>
+</ul>
+<h2 id="021">0.2.1</h2>
+<p>Released: 2009-08-07</p>
+<ul>
+<li>Fixed GC2: Added <code>handle_status()</code> method to the <code>ListKeys</code> class.</li>
+</ul>
+<h2 id="020">0.2.0</h2>
+<p>Released: 2009-07-16</p>
+<ul>
+<li>Various changes made to support Python 3.0.</li>
+</ul>
+<h2 id="010">0.1.0</h2>
+<p>Released: 2009-07-04</p>
+<ul>
+<li>Initial release.</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+    
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Previous
+                </span>
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../reference/gnupg/gnupg/" class="md-footer__link md-footer__link--next" aria-label="Next: Gnupg" rel="next">
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Next
+                </span>
+                Gnupg
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+            
+            Powered by
+            <a href="http://timothycrosley.github.io/portray">portray.</a>
+            You too can
+            <a href="http://timothycrosley.github.io/portray">
+              portray</a>
+            your Python project well using automatic documentation.
+          </div>
+        
+      </div>
+    </div>
+  </footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.078830c0.min.js"></script>
+      
+    
+  </body>
+</html>

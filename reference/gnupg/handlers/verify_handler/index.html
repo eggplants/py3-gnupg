@@ -1,0 +1,2089 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.5.4">
+    
+    
+      
+        <title>Verify Handler - py3-gnupg</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.80dcb947.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="lightgreen">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-gnupghandlersverify_handler" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="py3-gnupg" class="md-header__button md-logo" aria-label="py3-gnupg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            py3-gnupg
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Verify Handler
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/eggplants/py3-gnupg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    py3-gnupg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="py3-gnupg" class="md-nav__button md-logo" aria-label="py3-gnupg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    py3-gnupg
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/eggplants/py3-gnupg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    py3-gnupg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../CHANGELOG/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Gnupg
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Gnupg" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Gnupg
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gnupg/" class="md-nav__link">
+        Gnupg
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../helper/" class="md-nav__link">
+        Helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1_4" type="checkbox" id="__nav_3_1_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1_4">
+          Handlers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Handlers" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          Handlers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../add_subkey_handler/" class="md-nav__link">
+        Add Subkey Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auto_locate_key_handler/" class="md-nav__link">
+        Auto Locate Key Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crypt_handler/" class="md-nav__link">
+        Crypt Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../delete_result_handler/" class="md-nav__link">
+        Delete Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../export_result_handler/" class="md-nav__link">
+        Export Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gen_key_handler/" class="md-nav__link">
+        Gen Key Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helper/" class="md-nav__link">
+        Helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../import_result_handler/" class="md-nav__link">
+        Import Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../list_keys_handler/" class="md-nav__link">
+        List Keys Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scan_keys_handler/" class="md-nav__link">
+        Scan Keys Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../search_keys_handler/" class="md-nav__link">
+        Search Keys Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../send_result_handler/" class="md-nav__link">
+        Send Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sign_handler/" class="md-nav__link">
+        Sign Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status_handler/" class="md-nav__link">
+        Status Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text_handler/" class="md-nav__link">
+        Text Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust_result_handler/" class="md-nav__link">
+        Trust Result Handler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Verify Handler
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Verify Handler
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verifyhandler" class="md-nav__link">
+    VerifyHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="VerifyHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ancestors-in-mro" class="md-nav__link">
+    Ancestors (in MRO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descendants" class="md-nav__link">
+    Descendants
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-variables" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle_status" class="md-nav__link">
+    handle_status
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verifyhandler" class="md-nav__link">
+    VerifyHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="VerifyHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ancestors-in-mro" class="md-nav__link">
+    Ancestors (in MRO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descendants" class="md-nav__link">
+    Descendants
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-variables" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle_status" class="md-nav__link">
+    handle_status
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/eggplants/py3-gnupg/edit/main/reference/gnupg/handlers/verify_handler.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="module-gnupghandlersverify_handler">Module gnupg.handlers.verify_handler</h1>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">MappingProxyType</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gnupg.helper</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">_get_logger</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.status_handler</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">StatusHandler</span>
+
+<span class="k">if</span><span class="w"> </span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
+
+<span class="w">    </span><span class="kn">from</span><span class="w"> </span><span class="nn">gnupg.gnupg</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">GPG</span>
+
+<span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">VerifyHandler</span><span class="p">(</span><span class="n">StatusHandler</span><span class="p">):</span>
+
+<span class="w">    </span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">    This class handles status messages during signature verificaton.</span>
+
+<span class="s2">    &quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="n">TRUST_EXPIRED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">    </span><span class="n">TRUST_UNDEFINED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+
+<span class="w">    </span><span class="n">TRUST_NEVER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="w">    </span><span class="n">TRUST_MARGINAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+
+<span class="w">    </span><span class="n">TRUST_FULLY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+
+<span class="w">    </span><span class="n">TRUST_ULTIMATE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+
+<span class="w">    </span><span class="n">TRUST_LEVELS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MappingProxyType</span><span class="p">(</span>
+
+<span class="w">        </span><span class="p">{</span>
+
+<span class="w">            </span><span class="s2">&quot;TRUST_EXPIRED&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">TRUST_EXPIRED</span><span class="p">,</span>
+
+<span class="w">            </span><span class="s2">&quot;TRUST_UNDEFINED&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">TRUST_UNDEFINED</span><span class="p">,</span>
+
+<span class="w">            </span><span class="s2">&quot;TRUST_NEVER&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">TRUST_NEVER</span><span class="p">,</span>
+
+<span class="w">            </span><span class="s2">&quot;TRUST_MARGINAL&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">TRUST_MARGINAL</span><span class="p">,</span>
+
+<span class="w">            </span><span class="s2">&quot;TRUST_FULLY&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">TRUST_FULLY</span><span class="p">,</span>
+
+<span class="w">            </span><span class="s2">&quot;TRUST_ULTIMATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">TRUST_ULTIMATE</span><span class="p">,</span>
+
+<span class="w">        </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1"># for now, just the most common error codes. This can be expanded as and</span>
+
+<span class="w">    </span><span class="c1"># when reports come in of other errors.</span>
+
+<span class="w">    </span><span class="n">GPG_SYSTEM_ERROR_CODES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MappingProxyType</span><span class="p">(</span>
+
+<span class="w">        </span><span class="p">{</span>
+
+<span class="w">            </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;permission denied&quot;</span><span class="p">,</span>
+
+<span class="w">            </span><span class="mi">35</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;file exists&quot;</span><span class="p">,</span>
+
+<span class="w">            </span><span class="mi">81</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;file not found&quot;</span><span class="p">,</span>
+
+<span class="w">            </span><span class="mi">97</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;not a directory&quot;</span><span class="p">,</span>
+
+<span class="w">        </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">GPG_ERROR_CODES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MappingProxyType</span><span class="p">(</span>
+
+<span class="w">        </span><span class="p">{</span>
+
+<span class="w">            </span><span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;incorrect passphrase&quot;</span><span class="p">,</span>
+
+<span class="w">        </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">returncode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">gpg</span><span class="p">:</span><span class="w"> </span><span class="n">GPG</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kc">None</span><span class="p">:</span>
+
+<span class="w">        </span><span class="n">StatusHandler</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">gpg</span><span class="p">)</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">pubkey_fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">expire_timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">sig_timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">trust_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">trust_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">sig_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">        </span><span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nb">bool</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span>
+
+<span class="w">    </span><span class="fm">__bool__</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__nonzero__</span>
+
+<span class="w">    </span><span class="k">def</span><span class="w"> </span><span class="nf">handle_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">:</span><span class="w"> </span><span class="nb">str</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="nb">str</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kc">None</span><span class="p">:</span>
+
+<span class="w">        </span><span class="k">def</span><span class="w"> </span><span class="nf">update_sig_info</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span><span class="w"> </span><span class="nb">object</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kc">None</span><span class="p">:</span>
+
+<span class="w">            </span><span class="n">sig_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">signature_id</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">sig_id</span><span class="p">:</span>
+
+<span class="w">                </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sig_info</span><span class="p">[</span><span class="n">sig_id</span><span class="p">]</span>
+
+<span class="w">                </span><span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">else</span><span class="p">:</span>
+
+<span class="w">                </span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Ignored due to missing sig iD: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">TRUST_LEVELS</span><span class="p">:</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">trust_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">key</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">trust_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">TRUST_LEVELS</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">trust_level</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trust_level</span><span class="p">,</span><span class="w"> </span><span class="n">trust_text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trust_text</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1"># See Issue #214. Once we see this, we&#39;re done with the signature just seen.</span>
+
+<span class="w">            </span><span class="c1"># Zap the signature ID, because we don&#39;t see a SIG_ID unless we have a new</span>
+
+<span class="w">            </span><span class="c1"># good signature.</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="p">):</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;potential problem: </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;BADSIG&quot;</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signature bad&quot;</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;keyid&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">})</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;ERRSIG&quot;</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">algo</span><span class="p">,</span><span class="w"> </span><span class="n">hash_algo</span><span class="p">,</span><span class="w"> </span><span class="bp">cls</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="w">            </span><span class="c1"># Since GnuPG 2.2.7, a fingerprint is tacked on</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">7</span><span class="p">:</span><span class="w">  </span><span class="c1"># noqa: PLR2004</span>
+
+<span class="w">                </span><span class="bp">self</span><span class="o">.</span><span class="n">fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signature error&quot;</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">keyid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">timestamp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">status</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+
+<span class="w">                </span><span class="p">{</span>
+
+<span class="w">                    </span><span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="s2">&quot;keyid&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="s2">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="s2">&quot;fingerprint&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="p">},</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;EXPSIG&quot;</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signature expired&quot;</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;keyid&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">})</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;GOODSIG&quot;</span><span class="p">:</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">True</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signature good&quot;</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;VALIDSIG&quot;</span><span class="p">:</span>
+
+<span class="w">            </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="n">fingerprint</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">sig_ts</span><span class="p">,</span><span class="w"> </span><span class="n">expire_ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="w">            </span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fingerprint</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sig_timestamp</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">expire_timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">creation_date</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">sig_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">expire_ts</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">            </span><span class="c1"># may be different if signature is made with a subkey</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">:</span><span class="w">  </span><span class="c1"># noqa: PLR2004</span>
+
+<span class="w">                </span><span class="bp">self</span><span class="o">.</span><span class="n">pubkey_fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signature valid&quot;</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="o">=</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">creation_date</span><span class="o">=</span><span class="n">creation_date</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">timestamp</span><span class="o">=</span><span class="n">sig_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">expiry</span><span class="o">=</span><span class="n">expire_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">pubkey_fingerprint</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pubkey_fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">status</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;SIG_ID&quot;</span><span class="p">:</span>
+
+<span class="w">            </span><span class="n">sig_id</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">sig_info</span><span class="p">[</span><span class="n">sig_id</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;creation_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">timestamp</span><span class="p">}</span>
+
+<span class="w">            </span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signature_id</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">sig_id</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">timestamp</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;NO_PUBKEY&quot;</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;no public key&quot;</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;keyid&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">})</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;NO_SECKEY&quot;</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;no secret key&quot;</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;keyid&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">})</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;EXPKEYSIG&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;REVKEYSIG&quot;</span><span class="p">):</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="c1"># signed with expired or revoked key</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;EXPKEYSIG&quot;</span><span class="p">:</span>
+
+<span class="w">                </span><span class="bp">self</span><span class="o">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signing key has expired&quot;</span>
+
+<span class="w">            </span><span class="k">else</span><span class="p">:</span>
+
+<span class="w">                </span><span class="bp">self</span><span class="o">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signing key was revoked&quot;</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_status</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">keyid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">)</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;keyid&quot;</span><span class="p">:</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">key_id</span><span class="p">})</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;UNEXPECTED&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;FAILURE&quot;</span><span class="p">):</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;UNEXPECTED&quot;</span><span class="p">:</span>
+
+<span class="w">                </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;unexpected data&quot;</span>
+
+<span class="w">            </span><span class="k">else</span><span class="p">:</span>
+
+<span class="w">                </span><span class="c1"># N.B. there might be other reasons. For example, if an output</span>
+
+<span class="w">                </span><span class="c1"># file can&#39;t  be created - /dev/null/foo will lead to a</span>
+
+<span class="w">                </span><span class="c1"># &quot;not a directory&quot; error, but which is not sent as a status</span>
+
+<span class="w">                </span><span class="c1"># message with the [GNUPG:] prefix. Similarly if you try to</span>
+
+<span class="w">                </span><span class="c1"># write to &quot;/etc/foo&quot; as a non-root user, a &quot;permission denied&quot;</span>
+
+<span class="w">                </span><span class="c1"># error will be sent as a non-status message.</span>
+
+<span class="w">                </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s2">&quot;error - </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">                </span><span class="n">operation</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">code</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+
+<span class="w">                    </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFFFFFF</span><span class="w">  </span><span class="c1"># lose the error source</span>
+
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">error_map</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">error_map</span><span class="p">:</span>
+
+<span class="w">                        </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gpg</span><span class="o">.</span><span class="n">error_map</span><span class="p">[</span><span class="n">code</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">                    </span><span class="k">else</span><span class="p">:</span>
+
+<span class="w">                        </span><span class="n">system_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">bool</span><span class="p">(</span><span class="n">code</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x8000</span><span class="p">)</span>
+
+<span class="w">                        </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x7FFF</span>
+
+<span class="w">                        </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">GPG_SYSTEM_ERROR_CODES</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">system_error</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">GPG_ERROR_CODES</span>
+
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">mapping</span><span class="p">:</span>
+
+<span class="w">                            </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">mapping</span><span class="p">[</span><span class="n">code</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">:</span>
+
+<span class="w">                    </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;NODATA&quot;</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="c1"># See issue GH-191</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">False</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;signature expected but not found&quot;</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;DECRYPTION_INFO&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;PLAINTEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;PLAINTEXT_LENGTH&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;BEGIN_SIGNING&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;KEY_CONSIDERED&quot;</span><span class="p">):</span>
+
+<span class="w">            </span><span class="k">pass</span>
+
+<span class="w">        </span><span class="k">elif</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;NEWSIG&quot;</span><span class="p">,):</span>
+
+<span class="w">            </span><span class="c1"># Only sent in gpg2. Clear any signature ID, to be set by a following SIG_ID</span>
+
+<span class="w">            </span><span class="bp">self</span><span class="o">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">None</span>
+
+<span class="w">        </span><span class="k">else</span><span class="p">:</span><span class="w">  </span><span class="c1"># pragma: no cover</span>
+
+<span class="w">            </span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;message ignored: </span><span class="si">%r</span><span class="s2">, </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">TYPE_CHECKING</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">logger</span>
+</code></pre></div>
+
+<h2 id="classes">Classes</h2>
+<h3 id="verifyhandler">VerifyHandler</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">VerifyHandler</span><span class="p">(</span>
+    <span class="n">gpg</span><span class="p">:</span> <span class="s1">&#39;GPG&#39;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>This class handles status messages during signature verificaton.</p>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="n">VerifyHandler</span><span class="p">(</span><span class="n">StatusHandler</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">    This class handles status messages during signature verificaton.</span>
+
+<span class="ss">    &quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="n">TRUST_EXPIRED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">    </span><span class="n">TRUST_UNDEFINED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+
+<span class="w">    </span><span class="n">TRUST_NEVER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="w">    </span><span class="n">TRUST_MARGINAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+
+<span class="w">    </span><span class="n">TRUST_FULLY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+
+<span class="w">    </span><span class="n">TRUST_ULTIMATE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+
+<span class="w">    </span><span class="n">TRUST_LEVELS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MappingProxyType</span><span class="p">(</span>
+
+<span class="w">        </span><span class="err">{</span>
+
+<span class="w">            </span><span class="ss">&quot;TRUST_EXPIRED&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">TRUST_EXPIRED</span><span class="p">,</span>
+
+<span class="w">            </span><span class="ss">&quot;TRUST_UNDEFINED&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">TRUST_UNDEFINED</span><span class="p">,</span>
+
+<span class="w">            </span><span class="ss">&quot;TRUST_NEVER&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">TRUST_NEVER</span><span class="p">,</span>
+
+<span class="w">            </span><span class="ss">&quot;TRUST_MARGINAL&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">TRUST_MARGINAL</span><span class="p">,</span>
+
+<span class="w">            </span><span class="ss">&quot;TRUST_FULLY&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">TRUST_FULLY</span><span class="p">,</span>
+
+<span class="w">            </span><span class="ss">&quot;TRUST_ULTIMATE&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">TRUST_ULTIMATE</span><span class="p">,</span>
+
+<span class="w">        </span><span class="err">}</span><span class="p">,</span>
+
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">now</span><span class="p">,</span><span class="w"> </span><span class="n">just</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">most</span><span class="w"> </span><span class="n">common</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">codes</span><span class="p">.</span><span class="w"> </span><span class="n">This</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">expanded</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="ow">and</span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="n">reports</span><span class="w"> </span><span class="n">come</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">other</span><span class="w"> </span><span class="n">errors</span><span class="p">.</span>
+
+<span class="w">    </span><span class="n">GPG_SYSTEM_ERROR_CODES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MappingProxyType</span><span class="p">(</span>
+
+<span class="w">        </span><span class="err">{</span>
+
+<span class="w">            </span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;permission denied&quot;</span><span class="p">,</span>
+
+<span class="w">            </span><span class="mi">35</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;file exists&quot;</span><span class="p">,</span>
+
+<span class="w">            </span><span class="mi">81</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;file not found&quot;</span><span class="p">,</span>
+
+<span class="w">            </span><span class="mi">97</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;not a directory&quot;</span><span class="p">,</span>
+
+<span class="w">        </span><span class="err">}</span><span class="p">,</span>
+
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">GPG_ERROR_CODES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MappingProxyType</span><span class="p">(</span>
+
+<span class="w">        </span><span class="err">{</span>
+
+<span class="w">            </span><span class="mi">11</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;incorrect passphrase&quot;</span><span class="p">,</span>
+
+<span class="w">        </span><span class="err">}</span><span class="p">,</span>
+
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">returncode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="n">GPG</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+
+<span class="w">        </span><span class="n">StatusHandler</span><span class="p">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">gpg</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">creation_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">pubkey_fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">expire_timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">sig_timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">trust_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">trust_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">sig_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span>
+
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">__nonzero__</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nl">bool</span><span class="p">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span>
+
+<span class="w">    </span><span class="n">__bool__</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__nonzero__</span>
+
+<span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">handle_status</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+
+<span class="w">        </span><span class="n">def</span><span class="w"> </span><span class="n">update_sig_info</span><span class="p">(</span><span class="o">**</span><span class="nl">kwargs</span><span class="p">:</span><span class="w"> </span><span class="k">object</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">sig_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nl">sig_id</span><span class="p">:</span>
+
+<span class="w">                </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">sig_info</span><span class="o">[</span><span class="n">sig_id</span><span class="o">]</span>
+
+<span class="w">                </span><span class="n">info</span><span class="p">.</span><span class="k">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="ss">&quot;Ignored due to missing sig iD: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nl">TRUST_LEVELS</span><span class="p">:</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">trust_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">key</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">trust_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">TRUST_LEVELS</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">trust_level</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">trust_level</span><span class="p">,</span><span class="w"> </span><span class="n">trust_text</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">trust_text</span><span class="p">)</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">See</span><span class="w"> </span><span class="n">Issue</span><span class="w"> </span><span class="n">#214</span><span class="p">.</span><span class="w"> </span><span class="n">Once</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">we</span><span class="s1">&#39;re done with the signature just seen.</span>
+
+<span class="s1">            # Zap the signature ID, because we don&#39;</span><span class="n">t</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">SIG_ID</span><span class="w"> </span><span class="n">unless</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">new</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">good</span><span class="w"> </span><span class="n">signature</span><span class="p">.</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;WARNING&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;ERROR&quot;</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;potential problem: %s: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;BADSIG&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature bad&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;user&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;ERRSIG&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">algo</span><span class="p">,</span><span class="w"> </span><span class="n">hash_algo</span><span class="p">,</span><span class="w"> </span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">:5</span><span class="o">]</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">Since</span><span class="w"> </span><span class="n">GnuPG</span><span class="w"> </span><span class="mf">2.2.7</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">fingerprint</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">tacked</span><span class="w"> </span><span class="k">on</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">7</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">noqa</span><span class="p">:</span><span class="w"> </span><span class="n">PLR2004</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">6</span><span class="o">]</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature error&quot;</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span>
+
+<span class="w">                </span><span class="nc">timestamp</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span>
+
+<span class="w">                </span><span class="err">{</span>
+
+<span class="w">                    </span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="ss">&quot;timestamp&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="ss">&quot;fingerprint&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="err">}</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;EXPSIG&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature expired&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;user&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;GOODSIG&quot;</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">True</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature good&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;VALIDSIG&quot;</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="n">fingerprint</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">sig_ts</span><span class="p">,</span><span class="w"> </span><span class="n">expire_ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">:4</span><span class="o">]</span>
+
+<span class="w">            </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">sig_timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">expire_timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">creation_date</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">sig_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">expire_ts</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">different</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">made</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">subkey</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">noqa</span><span class="p">:</span><span class="w"> </span><span class="n">PLR2004</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">pubkey_fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">9</span><span class="o">]</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature valid&quot;</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="o">=</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">creation_date</span><span class="o">=</span><span class="n">creation_date</span><span class="p">,</span>
+
+<span class="w">                </span><span class="nc">timestamp</span><span class="o">=</span><span class="n">sig_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">expiry</span><span class="o">=</span><span class="n">expire_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">pubkey_fingerprint</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">pubkey_fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;SIG_ID&quot;</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">sig_id</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="nc">timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">sig_info</span><span class="o">[</span><span class="n">sig_id</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;creation_date&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;timestamp&quot;</span><span class="err">:</span><span class="w"> </span><span class="nc">timestamp</span><span class="err">}</span>
+
+<span class="w">            </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">sig_id</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="nc">timestamp</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;NO_PUBKEY&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;no public key&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;NO_SECKEY&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;no secret key&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;EXPKEYSIG&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;REVKEYSIG&quot;</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">signed</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">expired</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">revoked</span><span class="w"> </span><span class="k">key</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span><span class="o">[</span><span class="n">0</span><span class="o">]</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;EXPKEYSIG&quot;</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signing key has expired&quot;</span>
+
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signing key was revoked&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_status</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;UNEXPECTED&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;FAILURE&quot;</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;UNEXPECTED&quot;</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;unexpected data&quot;</span>
+
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">N</span><span class="p">.</span><span class="n">B</span><span class="p">.</span><span class="w"> </span><span class="n">there</span><span class="w"> </span><span class="n">might</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">other</span><span class="w"> </span><span class="n">reasons</span><span class="p">.</span><span class="w"> </span><span class="k">For</span><span class="w"> </span><span class="n">example</span><span class="p">,</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="k">output</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="n">can</span><span class="err">&#39;</span><span class="n">t</span><span class="w">  </span><span class="n">be</span><span class="w"> </span><span class="n">created</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="k">null</span><span class="o">/</span><span class="n">foo</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">lead</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">a</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="ss">&quot;not a directory&quot;</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">sent</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">status</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="o">[</span><span class="n">GNUPG:</span><span class="o">]</span><span class="w"> </span><span class="k">prefix</span><span class="p">.</span><span class="w"> </span><span class="n">Similarly</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="k">to</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="k">write</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="ss">&quot;/etc/foo&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">non</span><span class="o">-</span><span class="n">root</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ss">&quot;permission denied&quot;</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">sent</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">non</span><span class="o">-</span><span class="n">status</span><span class="w"> </span><span class="n">message</span><span class="p">.</span>
+
+<span class="w">                </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="ss">&quot;error - {value}&quot;</span>
+
+<span class="w">                </span><span class="k">operation</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">rsplit</span><span class="p">(</span><span class="ss">&quot; &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">code</span><span class="p">.</span><span class="n">isdigit</span><span class="p">()</span><span class="err">:</span>
+
+<span class="w">                    </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">int</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFFFFFF</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">lose</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">source</span>
+
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">gpg</span><span class="p">.</span><span class="n">error_map</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">gpg</span><span class="p">.</span><span class="nl">error_map</span><span class="p">:</span>
+
+<span class="w">                        </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="ss">&quot;{operation}: {self.gpg.error_map[code]}&quot;</span>
+
+<span class="w">                    </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                        </span><span class="n">system_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bool</span><span class="p">(</span><span class="n">code</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x8000</span><span class="p">)</span>
+
+<span class="w">                        </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x7FFF</span>
+
+<span class="w">                        </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">GPG_SYSTEM_ERROR_CODES</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">system_error</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">GPG_ERROR_CODES</span>
+
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">mapping</span><span class="p">:</span>
+
+<span class="w">                            </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="ss">&quot;{operation}: {mapping[code]}&quot;</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nl">status</span><span class="p">:</span>
+
+<span class="w">                    </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;NODATA&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">See</span><span class="w"> </span><span class="n">issue</span><span class="w"> </span><span class="n">GH</span><span class="o">-</span><span class="mi">191</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature expected but not found&quot;</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;DECRYPTION_INFO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;PLAINTEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;PLAINTEXT_LENGTH&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;BEGIN_SIGNING&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;KEY_CONSIDERED&quot;</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">pass</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;NEWSIG&quot;</span><span class="p">,)</span><span class="err">:</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="k">Only</span><span class="w"> </span><span class="n">sent</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">gpg2</span><span class="p">.</span><span class="w"> </span><span class="n">Clear</span><span class="w"> </span><span class="ow">any</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="n">ID</span><span class="p">,</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">SIG_ID</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="k">else</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="ss">&quot;message ignored: %r, %r&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+<hr />
+<h4 id="ancestors-in-mro">Ancestors (in MRO)</h4>
+<ul>
+<li>gnupg.handlers.status_handler.StatusHandler</li>
+</ul>
+<h4 id="descendants">Descendants</h4>
+<ul>
+<li>gnupg.handlers.crypt_handler.CryptHandler</li>
+</ul>
+<h4 id="class-variables">Class variables</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">GPG_ERROR_CODES</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">GPG_SYSTEM_ERROR_CODES</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">TRUST_EXPIRED</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">TRUST_FULLY</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">TRUST_LEVELS</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">TRUST_MARGINAL</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">TRUST_NEVER</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">TRUST_ULTIMATE</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">TRUST_UNDEFINED</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">returncode</span>
+</code></pre></div>
+
+<h4 id="methods">Methods</h4>
+<h4 id="handle_status">handle_status</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">handle_status</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;None&#39;</span>
+</code></pre></div>
+
+<p>Handle status messages from the <code>gpg</code> child process. These are lines of the format</p>
+<p>[GNUPG:] <key> <value></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key</td>
+<td>str</td>
+<td>Identifies what the status message is.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>value</td>
+<td>str</td>
+<td>Identifies additional data, which differs depending on the key.</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>View Source</summary>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="n">def</span><span class="w"> </span><span class="n">handle_status</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+
+<span class="w">        </span><span class="n">def</span><span class="w"> </span><span class="n">update_sig_info</span><span class="p">(</span><span class="o">**</span><span class="nl">kwargs</span><span class="p">:</span><span class="w"> </span><span class="k">object</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">None</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">sig_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nl">sig_id</span><span class="p">:</span>
+
+<span class="w">                </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">sig_info</span><span class="o">[</span><span class="n">sig_id</span><span class="o">]</span>
+
+<span class="w">                </span><span class="n">info</span><span class="p">.</span><span class="k">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="ss">&quot;Ignored due to missing sig iD: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nl">TRUST_LEVELS</span><span class="p">:</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">trust_text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">key</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">trust_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">TRUST_LEVELS</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">trust_level</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">trust_level</span><span class="p">,</span><span class="w"> </span><span class="n">trust_text</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">trust_text</span><span class="p">)</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">See</span><span class="w"> </span><span class="n">Issue</span><span class="w"> </span><span class="n">#214</span><span class="p">.</span><span class="w"> </span><span class="n">Once</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">we</span><span class="s1">&#39;re done with the signature just seen.</span>
+
+<span class="s1">            # Zap the signature ID, because we don&#39;</span><span class="n">t</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">SIG_ID</span><span class="w"> </span><span class="n">unless</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">new</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">good</span><span class="w"> </span><span class="n">signature</span><span class="p">.</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;WARNING&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;ERROR&quot;</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;potential problem: %s: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;BADSIG&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature bad&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;user&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;ERRSIG&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">algo</span><span class="p">,</span><span class="w"> </span><span class="n">hash_algo</span><span class="p">,</span><span class="w"> </span><span class="n">cls</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">:5</span><span class="o">]</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">Since</span><span class="w"> </span><span class="n">GnuPG</span><span class="w"> </span><span class="mf">2.2.7</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">fingerprint</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">tacked</span><span class="w"> </span><span class="k">on</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">7</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">noqa</span><span class="p">:</span><span class="w"> </span><span class="n">PLR2004</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">6</span><span class="o">]</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature error&quot;</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span>
+
+<span class="w">                </span><span class="nc">timestamp</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span>
+
+<span class="w">                </span><span class="err">{</span>
+
+<span class="w">                    </span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="ss">&quot;timestamp&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">,</span>
+
+<span class="w">                    </span><span class="ss">&quot;fingerprint&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="err">}</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;EXPSIG&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature expired&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;user&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;GOODSIG&quot;</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">True</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature good&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;VALIDSIG&quot;</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="n">fingerprint</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">sig_ts</span><span class="p">,</span><span class="w"> </span><span class="n">expire_ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">:4</span><span class="o">]</span>
+
+<span class="w">            </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">fingerprint</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">sig_timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">expire_timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">creation_date</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">sig_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">expire_ts</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">different</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">made</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">subkey</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">noqa</span><span class="p">:</span><span class="w"> </span><span class="n">PLR2004</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">pubkey_fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parts</span><span class="o">[</span><span class="n">9</span><span class="o">]</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature valid&quot;</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span>
+
+<span class="w">                </span><span class="n">fingerprint</span><span class="o">=</span><span class="n">fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">creation_date</span><span class="o">=</span><span class="n">creation_date</span><span class="p">,</span>
+
+<span class="w">                </span><span class="nc">timestamp</span><span class="o">=</span><span class="n">sig_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">expiry</span><span class="o">=</span><span class="n">expire_ts</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">pubkey_fingerprint</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">pubkey_fingerprint</span><span class="p">,</span>
+
+<span class="w">                </span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span>
+
+<span class="w">            </span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;SIG_ID&quot;</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">sig_id</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="nc">timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">sig_info</span><span class="o">[</span><span class="n">sig_id</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;creation_date&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;timestamp&quot;</span><span class="err">:</span><span class="w"> </span><span class="nc">timestamp</span><span class="err">}</span>
+
+<span class="w">            </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nc">timestamp</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">sig_id</span><span class="p">,</span><span class="w"> </span><span class="n">creation_date</span><span class="p">,</span><span class="w"> </span><span class="nc">timestamp</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;NO_PUBKEY&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;no public key&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;NO_SECKEY&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;no secret key&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;EXPKEYSIG&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;REVKEYSIG&quot;</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">signed</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">expired</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">revoked</span><span class="w"> </span><span class="k">key</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">split</span><span class="p">()</span><span class="o">[</span><span class="n">0</span><span class="o">]</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;EXPKEYSIG&quot;</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signing key has expired&quot;</span>
+
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">key_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signing key was revoked&quot;</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_status</span>
+
+<span class="w">            </span><span class="n">update_sig_info</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">keyid</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="p">)</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">problems</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="err">{</span><span class="ss">&quot;status&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;keyid&quot;</span><span class="err">:</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">key_id</span><span class="err">}</span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;UNEXPECTED&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;FAILURE&quot;</span><span class="p">)</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;UNEXPECTED&quot;</span><span class="err">:</span>
+
+<span class="w">                </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;unexpected data&quot;</span>
+
+<span class="w">            </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">N</span><span class="p">.</span><span class="n">B</span><span class="p">.</span><span class="w"> </span><span class="n">there</span><span class="w"> </span><span class="n">might</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">other</span><span class="w"> </span><span class="n">reasons</span><span class="p">.</span><span class="w"> </span><span class="k">For</span><span class="w"> </span><span class="n">example</span><span class="p">,</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="k">output</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="n">can</span><span class="err">&#39;</span><span class="n">t</span><span class="w">  </span><span class="n">be</span><span class="w"> </span><span class="n">created</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="k">null</span><span class="o">/</span><span class="n">foo</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">lead</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">a</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="ss">&quot;not a directory&quot;</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">sent</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">status</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="o">[</span><span class="n">GNUPG:</span><span class="o">]</span><span class="w"> </span><span class="k">prefix</span><span class="p">.</span><span class="w"> </span><span class="n">Similarly</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="k">to</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="k">write</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="ss">&quot;/etc/foo&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">non</span><span class="o">-</span><span class="n">root</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ss">&quot;permission denied&quot;</span>
+
+<span class="w">                </span><span class="err">#</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">sent</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">non</span><span class="o">-</span><span class="n">status</span><span class="w"> </span><span class="n">message</span><span class="p">.</span>
+
+<span class="w">                </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="ss">&quot;error - {value}&quot;</span>
+
+<span class="w">                </span><span class="k">operation</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">rsplit</span><span class="p">(</span><span class="ss">&quot; &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">code</span><span class="p">.</span><span class="n">isdigit</span><span class="p">()</span><span class="err">:</span>
+
+<span class="w">                    </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">int</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFFFFFF</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">lose</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">source</span>
+
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">gpg</span><span class="p">.</span><span class="n">error_map</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">gpg</span><span class="p">.</span><span class="nl">error_map</span><span class="p">:</span>
+
+<span class="w">                        </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="ss">&quot;{operation}: {self.gpg.error_map[code]}&quot;</span>
+
+<span class="w">                    </span><span class="k">else</span><span class="err">:</span>
+
+<span class="w">                        </span><span class="n">system_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bool</span><span class="p">(</span><span class="n">code</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x8000</span><span class="p">)</span>
+
+<span class="w">                        </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x7FFF</span>
+
+<span class="w">                        </span><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">GPG_SYSTEM_ERROR_CODES</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">system_error</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">GPG_ERROR_CODES</span>
+
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">mapping</span><span class="p">:</span>
+
+<span class="w">                            </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="ss">&quot;{operation}: {mapping[code]}&quot;</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="nl">status</span><span class="p">:</span>
+
+<span class="w">                    </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;NODATA&quot;</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="n">See</span><span class="w"> </span><span class="n">issue</span><span class="w"> </span><span class="n">GH</span><span class="o">-</span><span class="mi">191</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;signature expected but not found&quot;</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;DECRYPTION_INFO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;PLAINTEXT&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;PLAINTEXT_LENGTH&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;BEGIN_SIGNING&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;KEY_CONSIDERED&quot;</span><span class="p">)</span><span class="err">:</span>
+
+<span class="w">            </span><span class="n">pass</span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="p">(</span><span class="ss">&quot;NEWSIG&quot;</span><span class="p">,)</span><span class="err">:</span>
+
+<span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="k">Only</span><span class="w"> </span><span class="n">sent</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">gpg2</span><span class="p">.</span><span class="w"> </span><span class="n">Clear</span><span class="w"> </span><span class="ow">any</span><span class="w"> </span><span class="n">signature</span><span class="w"> </span><span class="n">ID</span><span class="p">,</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">SIG_ID</span>
+
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">signature_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span>
+
+<span class="w">        </span><span class="k">else</span><span class="err">:</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nl">pragma</span><span class="p">:</span><span class="w"> </span><span class="k">no</span><span class="w"> </span><span class="n">cover</span>
+
+<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="ss">&quot;message ignored: %r, %r&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+</code></pre></div>
+
+</details>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+    
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../trust_result_handler/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Trust Result Handler" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <div class="md-ellipsis">
+                <span class="md-footer__direction">
+                  Previous
+                </span>
+                Trust Result Handler
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+    <div class="md-footer-meta md-typeset">
+      <div class="md-footer-meta__inner md-grid">
+        <div class="md-footer-copyright">
+            
+            Powered by
+            <a href="http://timothycrosley.github.io/portray">portray.</a>
+            You too can
+            <a href="http://timothycrosley.github.io/portray">
+              portray</a>
+            your Python project well using automatic documentation.
+          </div>
+        
+      </div>
+    </div>
+  </footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.078830c0.min.js"></script>
+      
+    
+  </body>
+</html>
