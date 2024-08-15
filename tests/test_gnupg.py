@@ -1081,14 +1081,14 @@ class GPGTestCase(unittest.TestCase):
     def test_nogpg(self) -> None:
         "Test that absence of gpg is handled correctly"
         gpgbinary = "frob"
-        with pytest.raises(OSError, match=rf"Unable to run gpg \({gpgbinary}\) - it may not be available\."):
+        with pytest.raises(OSError, match=re.escape(f"Unable to run gpg ({gpgbinary}) - it may not be available.")):
             gnupg.GPG(gnupghome=self.homedir, gpgbinary=gpgbinary)
 
     def test_invalid_home(self) -> None:
         "Test that any specified gnupghome directory actually is one"
         hd = tempfile.mkdtemp(prefix="keys-")
         shutil.rmtree(hd)  # make sure it isn't there anymore
-        with pytest.raises(ValueError, match=rf"gnupghome should be a directory \(it isn't\): {hd}"):
+        with pytest.raises(ValueError, match=re.escape(f"gnupghome should be a directory (it isn't): {hd}")):
             gnupg.GPG(gnupghome=hd)
 
     def test_make_args(self) -> None:
